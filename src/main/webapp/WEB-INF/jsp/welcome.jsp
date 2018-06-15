@@ -41,7 +41,7 @@
 
     <style>
         body {
-            font: 14px/1 "Open Sans", sans-serif;
+            font: 16px "Calibri Light", sans-serif;
         }
     </style>
 </head>
