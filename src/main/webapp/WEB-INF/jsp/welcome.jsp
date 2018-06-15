@@ -32,17 +32,6 @@
         }
     </script>
 
-    <!-- Блокировка экрана -->
-    <script type="text/javascript">
-        function lockScreen() {
-            var lock = document.getElementById('lockPane');
-            if (lock)
-                lock.className = 'lockScreenOn';
-                $('body').addClass('stop-scrolling');
-                document.body.scrollTop = document.documentElement.scrollTop = 0;
-        }
-    </script>
-
     <!-- Копирайт -->
     <script>
         function cop() {
@@ -54,56 +43,10 @@
         body {
             font: 14px/1 "Open Sans", sans-serif;
         }
-        /* Блокировка экрана */
-        .lockScreenOff {
-            display: none;
-            visibility: hidden;
-        }
-        .lockScreenOn {
-            display: block;
-            visibility: visible;
-            position: absolute;
-            z-index: 999;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            background-color: #ccc;
-            text-align: center;
-            filter: alpha(opacity=75);
-            opacity: 0.75;
-        }
-        .stop-scrolling {
-            height: 100%;
-            overflow: hidden;
-        }
-        /* Стили лоадера */
-        .hide {
-            display: none;
-        }
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #364274;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-            position: relative;
-            top: 40%;
-            left: 45%;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 
 <body onload="cop()">
-
-<div id="lockPane" class="lockScreenOff">
-    <div class="loader" hide></div>
-</div>
 
 <div class="one">
     <h1>сервис отчетов</h1>
@@ -136,7 +79,7 @@
                             <p>Файл заявок</p>
                                 <input type="file" name="routes" multiple accept="xlsx">
                             <p>
-                                <input type="submit" value="Загрузить" class="bot1" id="startProcess" onclick="lockScreen();">
+                                <input type="submit" value="Загрузить" class="bot1">
                             </p>
                         </form>
                     </div>
