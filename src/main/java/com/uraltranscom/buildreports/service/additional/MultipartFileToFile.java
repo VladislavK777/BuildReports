@@ -1,19 +1,15 @@
-package com.uraltranscom.service.additional;
+package com.uraltranscom.buildreports.service.additional;
 
 /**
  *
  * Класс для конвертации из MultipartFile в File
  *
  * @author Vladislav Klochkov
- * @version 4.2
- * @create 12.01.2018
+ * @version 1.0
+ * @create 13.06.2018
  *
- * 12.01.2018
- *   1. Версия 3.0
- * 14.03.2018
- *   1. Версия 4.0
- * 25.04.2018
- *   1. Версия 4.2
+ * 13.06.2018
+ *   1. Версия 1.0
  *
  */
 

@@ -1,4 +1,4 @@
-package com.uraltranscom.service;
+package com.uraltranscom.buildreports.service;
 
 /**
  *

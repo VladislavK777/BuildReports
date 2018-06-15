@@ -10,15 +10,15 @@
     </bean>
 
     <!-- Инициализация бина zookeeper -->
-    <bean id="zkSettingsHolder" class="com.uraltranscom.util.ZookeeperSettingHolder">
+    <bean id="zkSettingsHolder" class="com.uraltranscom.buildreports.util.ZookeeperSettingHolder">
         <property name="commonPropertiesAccessor">
-            <bean class="com.uraltranscom.util.CommonPropertiesAccessor"/>
+            <bean class="com.uraltranscom.buildreports.util.CommonPropertiesAccessor"/>
         </property>
     </bean>
 
     <!-- дешифровка пароля -->
     <bean id="decodedPassword" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="com.uraltranscom.util.KeyMaster"/>
+        <property name="targetClass" value="com.uraltranscom.buildreports.util.KeyMaster"/>
         <property name="targetMethod" value="dec"/>
         <property name="arguments">
             <list>
@@ -36,7 +36,7 @@
         <property name="password" value="#{decodedPassword}"/>
     </bean>
 
-    <bean id="dataSourceInit" class="com.uraltranscom.util.ConnectionDB">
+    <bean id="dataSourceInit" class="com.uraltranscom.buildreports.util.ConnectionDB">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>

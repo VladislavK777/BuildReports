@@ -17,7 +17,7 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <!-- Сканирует пакет для поиска бинов -->
-    <context:component-scan base-package="com.uraltranscom" />
+    <context:component-scan base-package="com.uraltranscom.buildreports" />
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />

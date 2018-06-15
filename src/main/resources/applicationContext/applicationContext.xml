@@ -9,35 +9,4 @@
         <property name="maxUploadSize" value="10000000" />
     </bean>
 
-    <!-- Инициализация бина zookeeper -->
-    <bean id="zkSettingsHolder" class="com.uraltranscom.util.ZookeeperSettingHolder">
-        <property name="commonPropertiesAccessor">
-            <bean class="com.uraltranscom.util.CommonPropertiesAccessor"/>
-        </property>
-    </bean>
-
-    <!-- дешифровка пароля -->
-    <bean id="decodedPassword" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass" value="com.uraltranscom.util.KeyMaster"/>
-        <property name="targetMethod" value="dec"/>
-        <property name="arguments">
-            <list>
-                <value>#{zkSettingsHolder.password}</value>
-                <value>#{zkSettingsHolder.secretKey}</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- устанавливаем соединение -->
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" lazy-init="false"  destroy-method="close">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="#{zkSettingsHolder.dataBase}"/>
-        <property name="username" value="#{zkSettingsHolder.user}"/>
-        <property name="password" value="#{decodedPassword}"/>
-    </bean>
-
-    <bean class="com.uraltranscom.util.ConnectionDB">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
 </beans>
