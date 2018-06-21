@@ -1,8 +1,8 @@
 package com.uraltranscom.buildreports.service.impl;
 
 import com.uraltranscom.buildreports.model.Wagon;
-import com.uraltranscom.buildreports.service.export.WriteToFileExcel;
 import com.uraltranscom.buildreports.service.GetList;
+import com.uraltranscom.buildreports.service.export.WriteToFileExcel;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class GetListOfWagonsImpl implements GetList {
     // Переменные для работы с файлами
     private File file ;
     private FileInputStream fileInputStream;
+    private List<Date> dates;
 
     // Переменные для работы с Excel файлом(формат XLSX)
     private XSSFWorkbook xssfWorkbook;
@@ -68,58 +70,52 @@ public class GetListOfWagonsImpl implements GetList {
             for (int j = 1; j < sheet.getLastRowNum() + 1; j++) {
                 XSSFRow row = sheet.getRow(0);
 
-                String nameOfStationDeparture = null;
-                String nameRoadOfStationDeparture = null;
                 String nameOfStationDestination = null;
                 String nameRoadStationDestination = null;
-                String customer = null;
-                String cargo = null;
-                String distance = null;
-                double rate = 0.00d;
+                int volume = 0;
+                Date dateToDeparted = null;
+                String condition = null;
+                double stopAtStation = 0.00d;
+                String emptyOrFull = null;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
-                    if (row.getCell(c).getStringCellValue().trim().equals("Станция отправления")) {
-                        XSSFRow xssfRow = sheet.getRow(j);
-                        nameOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
-                    }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Дор. отпр.")) {
-                        XSSFRow xssfRow = sheet.getRow(j);
-                        nameRoadOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
-                    }
                     if (row.getCell(c).getStringCellValue().trim().equals("Станция назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         nameOfStationDestination = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Дор. назн.")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         nameRoadStationDestination = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Заказчик")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Дата отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        customer = xssfRow.getCell(c).getStringCellValue();
+                        dateToDeparted = xssfRow.getCell(c).getDateCellValue();
+                        if (dateToDeparted == null) dateToDeparted = new Date();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Груз (ЕТСНГ)")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Состояние вагона")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        cargo = xssfRow.getCell(c).getStringCellValue();
+                        condition = xssfRow.getCell(c).getStringCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Расстояние всего")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Обьем вагона")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        String val = Double.toString(xssfRow.getCell(c).getNumericCellValue());
-                        double valueDouble = xssfRow.getCell(c).getNumericCellValue();
-                        if ((valueDouble - (int) valueDouble) * 1000 == 0) {
-                            val = (int) valueDouble + "";
-                        }
-                        distance = val;
+                        volume = (int) xssfRow.getCell(c).getNumericCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Ставка с Заказчиком, р/ваг (без НДС)")) {
+                    if (row.getCell(c).getStringCellValue().trim().equals("Простой на станции дислокации")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        rate = xssfRow.getCell(c).getNumericCellValue();
+                        stopAtStation = xssfRow.getCell(c).getNumericCellValue();
+                    }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Груж\\Порож")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        emptyOrFull = xssfRow.getCell(c).getStringCellValue();
                     }
                 }
-                listOfWagons.add(new Wagon(nameOfStationDeparture, nameRoadOfStationDeparture, nameOfStationDestination, nameRoadStationDestination, customer, cargo, distance, rate));
+                if (!nameOfStationDestination.equals("00000")) {
+                    if (volume == 122) volume = 120;
+                    if (volume == 158) volume = 150;
+                    listOfWagons.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                }
             }
             logger.debug("Body wagon: {}", listOfWagons);
-            writeToFileExcel.setTempListWagon(getListCountWagon(listOfWagons));
         } catch (IOException e) {
             logger.error("Ошибка загруки файла - {}", e.getMessage());
         } catch (OLE2NotOfficeXmlFileException e1) {
@@ -135,21 +131,40 @@ public class GetListOfWagonsImpl implements GetList {
         } else {
             for (Wagon wagon : listOfWagons) {
                 int count = 0;
-                int distance = 0;
-                double rate = 0.00d;
+                int countLoading = 0;
+                int countDrive = 0;
+                int countInDate = 0;
+                double stopAtStation = 0.00d;
                 for (Wagon wagon1 : listOfWagons) {
-                    if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
-                            wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination()) &&
-                            wagon.getCustomer().equals(wagon1.getCustomer())) {
+                    if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination()) &&
+                            wagon.getVolume() == wagon1.getVolume()) {
                         count++;
-                        distance = distance + Integer.valueOf(wagon1.getDistance());
-                        rate = rate + wagon1.getRate();
+                        switch (wagon1.getCondition()) {
+                            case "Под погрузкой":
+                                countLoading++;
+                                stopAtStation = stopAtStation + wagon1.getStopAtStation();
+                                break;
+                            case "Порожний ход":
+                                countDrive++;
+                                break;
+                            case "Перестановка":
+                                countDrive++;
+                                break;
+                            case "На промывке":
+                                countDrive++;
+                                break;
+                        }
+                        if (wagon1.getEmptyOrFull().equals("ГРУЖ")) {
+                            if (dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() && wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
+                                countInDate++;
+                            }
+                        }
                     }
                 }
-                if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(), wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                        wagon.getCustomer(), wagon.getCargo(), count, distance / count, Math.round((rate / count) * 100.0) / 100.0d))) {
-                    listCountWagon.add(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(), wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                            wagon.getCustomer(), wagon.getCargo(), count, distance / count, Math.round((rate / count) * 100.0) / 100.0d));
+                if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
+                        wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
+                    listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
+                            wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
                 }
             }
         }
@@ -172,5 +187,13 @@ public class GetListOfWagonsImpl implements GetList {
     public void setFile(File file) {
         this.file = file;
         fillMap();
+    }
+
+    public List<Date> getDates() {
+        return dates;
+    }
+
+    public void setDates(ArrayList<Date> dates) {
+        this.dates = dates;
     }
 }

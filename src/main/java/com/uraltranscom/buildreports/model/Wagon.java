@@ -1,5 +1,6 @@
 package com.uraltranscom.buildreports.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -16,58 +17,39 @@ import java.util.Objects;
  */
 
 public class Wagon {
-    private String nameOfStationDeparture; // Станция отправления
-    private String nameRoadOfStationDeparture; // Дорга станции отправления
     private String nameOfStationDestination; // Станция назначения
     private String nameRoadStationDestination; // Дорога станции назначения
-    private String customer; // Заказчик
-    private String cargo; // Груз
-    private String distance; // Дистанция
-    private double rate; // Ставка
+    private int volume; // Объем вагона
+    private Date dateToDeparted; // Дата отправления
+    private String condition; // Состояние вагона Под погрузку
+    private double stopAtStation; // Простой на станции дислокации
+    private String emptyOrFull; // Состояние вагона Порожний/Груженный
 
-    private int count; // Количество рейсов одинаковых
-    private int averageDistance; // Среднее расстояние
-    private double averageRate; // Средняя ставка
+    private int count; // Количество вагонов на станции
+    private int countLoading; // Под погрузкой, ед.
+    private int countDrive; // Подход (в движении), ед.
+    private int countInDate; // Количесвто на дату
+    private double avarageStopAtStation; // Средний простой под погр, сут.
 
-    private boolean isOk = false;
-
-    public Wagon(String nameOfStationDeparture, String nameRoadOfStationDeparture, String nameOfStationDestination, String nameRoadStationDestination, String customer, String cargo, String distance, double rate) {
-        this.nameOfStationDeparture = nameOfStationDeparture;
-        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
-        this.customer = customer;
-        this.cargo = cargo;
-        this.distance = distance;
-        this.rate = rate;
+        this.volume = volume;
+        this.dateToDeparted = dateToDeparted;
+        this.condition = condition;
+        this.stopAtStation = stopAtStation;
+        this.emptyOrFull = emptyOrFull;
     }
 
-    public Wagon(String nameOfStationDeparture, String nameRoadOfStationDeparture, String nameOfStationDestination, String nameRoadStationDestination, String customer, String cargo, int count, int averageDistance, double averageRate) {
-        this.nameOfStationDeparture = nameOfStationDeparture;
-        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, int volume, int count, int countLoading, int countDrive, int countInDate, double avarageStopAtStation) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
-        this.customer = customer;
-        this.cargo = cargo;
+        this.volume = volume;
         this.count = count;
-        this.averageDistance = averageDistance;
-        this.averageRate = averageRate;
-    }
-
-    public String getNameOfStationDeparture() {
-        return nameOfStationDeparture;
-    }
-
-    public void setNameOfStationDeparture(String nameOfStationDeparture) {
-        this.nameOfStationDeparture = nameOfStationDeparture;
-    }
-
-    public String getNameRoadOfStationDeparture() {
-        return nameRoadOfStationDeparture;
-    }
-
-    public void setNameRoadOfStationDeparture(String nameRoadOfStationDeparture) {
-        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
+        this.countLoading = countLoading;
+        this.countDrive = countDrive;
+        this.countInDate = countInDate;
+        this.avarageStopAtStation = avarageStopAtStation;
     }
 
     public String getNameOfStationDestination() {
@@ -86,36 +68,36 @@ public class Wagon {
         this.nameRoadStationDestination = nameRoadStationDestination;
     }
 
-    public String getCustomer() {
-        return customer;
+    public int getVolume() {
+        return volume;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setVolume(int volume) {
+        this.volume = volume;
     }
 
-    public String getCargo() {
-        return cargo;
+    public Date getDateToDeparted() {
+        return dateToDeparted;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setDateToDeparted(Date dateToDeparted) {
+        this.dateToDeparted = dateToDeparted;
     }
 
-    public String getDistance() {
-        return distance;
+    public String getCondition() {
+        return condition;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
-    public double getRate() {
-        return rate;
+    public double getStopAtStation() {
+        return stopAtStation;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setStopAtStation(double stopAtStation) {
+        this.stopAtStation = stopAtStation;
     }
 
     public int getCount() {
@@ -126,28 +108,44 @@ public class Wagon {
         this.count = count;
     }
 
-    public int getAverageDistance() {
-        return averageDistance;
+    public int getCountLoading() {
+        return countLoading;
     }
 
-    public void setAverageDistance(int averageDistance) {
-        this.averageDistance = averageDistance;
+    public void setCountLoading(int countLoading) {
+        this.countLoading = countLoading;
     }
 
-    public double getAverageRate() {
-        return averageRate;
+    public int getCountDrive() {
+        return countDrive;
     }
 
-    public void setAverageRate(double averageRate) {
-        this.averageRate = averageRate;
+    public void setCountDrive(int countDrive) {
+        this.countDrive = countDrive;
     }
 
-    public boolean isOk() {
-        return isOk;
+    public int getCountInDate() {
+        return countInDate;
     }
 
-    public void setOk(boolean ok) {
-        isOk = ok;
+    public void setCountInDate(int countInDate) {
+        this.countInDate = countInDate;
+    }
+
+    public double getAvarageStopAtStation() {
+        return avarageStopAtStation;
+    }
+
+    public void setAvarageStopAtStation(double avarageStopAtStation) {
+        this.avarageStopAtStation = avarageStopAtStation;
+    }
+
+    public String getEmptyOrFull() {
+        return emptyOrFull;
+    }
+
+    public void setEmptyOrFull(String emptyOrFull) {
+        this.emptyOrFull = emptyOrFull;
     }
 
     @Override
@@ -155,40 +153,41 @@ public class Wagon {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Wagon wagon = (Wagon) o;
-        return Double.compare(wagon.rate, rate) == 0 &&
+        return volume == wagon.volume &&
+                Double.compare(wagon.stopAtStation, stopAtStation) == 0 &&
                 count == wagon.count &&
-                averageDistance == wagon.averageDistance &&
-                Double.compare(wagon.averageRate, averageRate) == 0 &&
-                Objects.equals(nameOfStationDeparture, wagon.nameOfStationDeparture) &&
-                Objects.equals(nameRoadOfStationDeparture, wagon.nameRoadOfStationDeparture) &&
+                countLoading == wagon.countLoading &&
+                countDrive == wagon.countDrive &&
+                countInDate == wagon.countInDate &&
+                Double.compare(wagon.avarageStopAtStation, avarageStopAtStation) == 0 &&
                 Objects.equals(nameOfStationDestination, wagon.nameOfStationDestination) &&
                 Objects.equals(nameRoadStationDestination, wagon.nameRoadStationDestination) &&
-                Objects.equals(customer, wagon.customer) &&
-                Objects.equals(cargo, wagon.cargo) &&
-                Objects.equals(distance, wagon.distance);
+                Objects.equals(dateToDeparted, wagon.dateToDeparted) &&
+                Objects.equals(condition, wagon.condition) &&
+                Objects.equals(emptyOrFull, wagon.emptyOrFull);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, nameOfStationDestination, nameRoadStationDestination, customer, cargo, distance, rate, count, averageDistance, averageRate);
+        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, avarageStopAtStation);
     }
 
     @Override
     public String toString() {
         return "Wagon{" +
-                "nameOfStationDeparture='" + nameOfStationDeparture + '\'' +
-                ", nameRoadOfStationDeparture='" + nameRoadOfStationDeparture + '\'' +
-                ", nameOfStationDestination='" + nameOfStationDestination + '\'' +
+                "nameOfStationDestination='" + nameOfStationDestination + '\'' +
                 ", nameRoadStationDestination='" + nameRoadStationDestination + '\'' +
-                ", customer='" + customer + '\'' +
-                ", cargo='" + cargo + '\'' +
-                ", distance='" + distance + '\'' +
-                ", rate=" + rate +
+                ", volume=" + volume +
+                ", dateToDeparted=" + dateToDeparted +
+                ", condition='" + condition + '\'' +
+                ", stopAtStation=" + stopAtStation +
+                ", emptyOrFull='" + emptyOrFull + '\'' +
                 ", count=" + count +
-                ", averageDistance=" + averageDistance +
-                ", averageRate=" + averageRate +
-                ", isOk=" + isOk +
+                ", countLoading=" + countLoading +
+                ", countDrive=" + countDrive +
+                ", countInDate=" + countInDate +
+                ", avarageStopAtStation=" + avarageStopAtStation +
                 '}';
     }
 }

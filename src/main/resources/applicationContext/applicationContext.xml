@@ -9,4 +9,7 @@
         <property name="maxUploadSize" value="10000000" />
     </bean>
 
+    <bean class="com.uraltranscom.buildreports.service.impl.RootClazz"/>
+    <bean class="com.uraltranscom.buildreports.service.impl.GetListOfRoutesImpl"/>
+
 </beans>

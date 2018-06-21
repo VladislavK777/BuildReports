@@ -1,7 +1,5 @@
 package com.uraltranscom.buildreports.model;
 
-import java.util.Objects;
-
 /**
  *
  * Класс Маршрута
@@ -18,31 +16,18 @@ import java.util.Objects;
 public class Route {
     private String nameOfStationDeparture; // Станция отправления
     private String nameRoadOfStationDeparture; // Дорга станции отправления
-    private String nameOfStationDestination; // Станция назначения
-    private String nameRoadStationDestination; // Дорога станции назначения
     private String customer; // Заказчик
+    private int volumeFrom; // Объем от
+    private int volumeTo; // Объем до
+    private int countOrder; // Количество ПС
 
-    private int count; // Количество рейсов одинаковых
-    private int averageDistance; // Среднее расстояние
-    private double averageRate; // Средняя ставка
-
-    public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String nameOfStationDestination, String nameRoadStationDestination, String customer) {
+    public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volumeFrom, int volumeTo, int countOrder) {
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
-        this.nameOfStationDestination = nameOfStationDestination;
-        this.nameRoadStationDestination = nameRoadStationDestination;
         this.customer = customer;
-    }
-
-    public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String nameOfStationDestination, String nameRoadStationDestination, String customer, int count, int averageDistance, double averageRate) {
-        this.nameOfStationDeparture = nameOfStationDeparture;
-        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
-        this.nameOfStationDestination = nameOfStationDestination;
-        this.nameRoadStationDestination = nameRoadStationDestination;
-        this.customer = customer;
-        this.count = count;
-        this.averageDistance = averageDistance;
-        this.averageRate = averageRate;
+        this.volumeFrom = volumeFrom;
+        this.volumeTo = volumeTo;
+        this.countOrder = countOrder;
     }
 
     public String getNameOfStationDeparture() {
@@ -61,22 +46,6 @@ public class Route {
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
     }
 
-    public String getNameOfStationDestination() {
-        return nameOfStationDestination;
-    }
-
-    public void setNameOfStationDestination(String nameOfStationDestination) {
-        this.nameOfStationDestination = nameOfStationDestination;
-    }
-
-    public String getNameRoadStationDestination() {
-        return nameRoadStationDestination;
-    }
-
-    public void setNameRoadStationDestination(String nameRoadStationDestination) {
-        this.nameRoadStationDestination = nameRoadStationDestination;
-    }
-
     public String getCustomer() {
         return customer;
     }
@@ -85,57 +54,36 @@ public class Route {
         this.customer = customer;
     }
 
-    public int getCount() {
-        return count;
+    public int getVolumeFrom() {
+        return volumeFrom;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setVolumeFrom(int volumeFrom) {
+        this.volumeFrom = volumeFrom;
     }
 
-    public int getAverageDistance() {
-        return averageDistance;
+    public int getVolumeTo() {
+        return volumeTo;
     }
 
-    public void setAverageDistance(int averageDistance) {
-        this.averageDistance = averageDistance;
+    public void setVolumeTo(int volumeTo) {
+        this.volumeTo = volumeTo;
     }
 
-    public double getAverageRate() {
-        return averageRate;
+    public int getCountOrder() {
+        return countOrder;
     }
 
-    public void setAverageRate(double averageRate) {
-        this.averageRate = averageRate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Route route = (Route) o;
-        return count == route.count &&
-                averageDistance == route.averageDistance &&
-                Double.compare(route.averageRate, averageRate) == 0 &&
-                Objects.equals(nameOfStationDeparture, route.nameOfStationDeparture) &&
-                Objects.equals(nameRoadOfStationDeparture, route.nameRoadOfStationDeparture) &&
-                Objects.equals(nameOfStationDestination, route.nameOfStationDestination) &&
-                Objects.equals(nameRoadStationDestination, route.nameRoadStationDestination) &&
-                Objects.equals(customer, route.customer);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, nameOfStationDestination, nameRoadStationDestination, customer, count, averageDistance, averageRate);
+    public void setCountOrder(int countOrder) {
+        this.countOrder = countOrder;
     }
 
     @Override
     public String toString() {
         return  nameOfStationDeparture +
                 ", " + nameRoadOfStationDeparture +
-                ", " + nameOfStationDestination +
-                ", " + nameRoadStationDestination +
-                ", " + customer;
+                ", " + customer +
+                ", " + volumeFrom +
+                ", " + countOrder;
     }
 }

@@ -74,10 +74,12 @@
                     </div>
                     <div class="form">
                         <form enctype="multipart/form-data" method="post" action="report">
-                            <p>Файл вагонов</p>
-                                <input type="file" name="wagons" multiple accept="xlsx">
-                            <p>Файл заявок</p>
-                                <input type="file" name="routes" multiple accept="xlsx">
+                            <p>
+                                Файл вагонов <input type="file" name="wagons" multiple accept="xlsx">
+                                Файл заявок <input type="file" name="routes" multiple accept="xlsx">
+                                Выберите дату от <input type="date" name="dateFrom">
+                                Выберите дату до <input type="date" name="dateTo">
+                            </p>
                             <p>
                                 <input type="submit" value="Загрузить" class="bot1">
                             </p>
