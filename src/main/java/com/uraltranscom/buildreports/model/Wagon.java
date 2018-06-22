@@ -19,6 +19,8 @@ import java.util.Objects;
 public class Wagon {
     private String nameOfStationDestination; // Станция назначения
     private String nameRoadStationDestination; // Дорога станции назначения
+    private String nameOfStationDeparture; // Станция отправления
+    private String nameRoadOfStationDeparture; // Дорга станции отправления
     private int volume; // Объем вагона
     private Date dateToDeparted; // Дата отправления
     private String condition; // Состояние вагона Под погрузку
@@ -31,9 +33,13 @@ public class Wagon {
     private int countInDate; // Количесвто на дату
     private double avarageStopAtStation; // Средний простой под погр, сут.
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull) {
+    boolean isOk = false; // Признак добавления
+
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
+        this.nameOfStationDeparture = nameOfStationDeparture;
+        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.volume = volume;
         this.dateToDeparted = dateToDeparted;
         this.condition = condition;
@@ -68,6 +74,22 @@ public class Wagon {
         this.nameRoadStationDestination = nameRoadStationDestination;
     }
 
+    public String getNameOfStationDeparture() {
+        return nameOfStationDeparture;
+    }
+
+    public void setNameOfStationDeparture(String nameOfStationDeparture) {
+        this.nameOfStationDeparture = nameOfStationDeparture;
+    }
+
+    public String getNameRoadOfStationDeparture() {
+        return nameRoadOfStationDeparture;
+    }
+
+    public void setNameRoadOfStationDeparture(String nameRoadOfStationDeparture) {
+        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
+    }
+
     public int getVolume() {
         return volume;
     }
@@ -98,6 +120,14 @@ public class Wagon {
 
     public void setStopAtStation(double stopAtStation) {
         this.stopAtStation = stopAtStation;
+    }
+
+    public String getEmptyOrFull() {
+        return emptyOrFull;
+    }
+
+    public void setEmptyOrFull(String emptyOrFull) {
+        this.emptyOrFull = emptyOrFull;
     }
 
     public int getCount() {
@@ -140,12 +170,12 @@ public class Wagon {
         this.avarageStopAtStation = avarageStopAtStation;
     }
 
-    public String getEmptyOrFull() {
-        return emptyOrFull;
+    public boolean isOk() {
+        return isOk;
     }
 
-    public void setEmptyOrFull(String emptyOrFull) {
-        this.emptyOrFull = emptyOrFull;
+    public void setOk(boolean ok) {
+        isOk = ok;
     }
 
     @Override
@@ -160,8 +190,11 @@ public class Wagon {
                 countDrive == wagon.countDrive &&
                 countInDate == wagon.countInDate &&
                 Double.compare(wagon.avarageStopAtStation, avarageStopAtStation) == 0 &&
+                isOk == wagon.isOk &&
                 Objects.equals(nameOfStationDestination, wagon.nameOfStationDestination) &&
                 Objects.equals(nameRoadStationDestination, wagon.nameRoadStationDestination) &&
+                Objects.equals(nameOfStationDeparture, wagon.nameOfStationDeparture) &&
+                Objects.equals(nameRoadOfStationDeparture, wagon.nameRoadOfStationDeparture) &&
                 Objects.equals(dateToDeparted, wagon.dateToDeparted) &&
                 Objects.equals(condition, wagon.condition) &&
                 Objects.equals(emptyOrFull, wagon.emptyOrFull);
@@ -170,7 +203,7 @@ public class Wagon {
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, avarageStopAtStation);
+        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, avarageStopAtStation, isOk);
     }
 
     @Override
@@ -178,6 +211,8 @@ public class Wagon {
         return "Wagon{" +
                 "nameOfStationDestination='" + nameOfStationDestination + '\'' +
                 ", nameRoadStationDestination='" + nameRoadStationDestination + '\'' +
+                ", nameOfStationDeparture='" + nameOfStationDeparture + '\'' +
+                ", nameRoadOfStationDeparture='" + nameRoadOfStationDeparture + '\'' +
                 ", volume=" + volume +
                 ", dateToDeparted=" + dateToDeparted +
                 ", condition='" + condition + '\'' +
@@ -188,6 +223,7 @@ public class Wagon {
                 ", countDrive=" + countDrive +
                 ", countInDate=" + countInDate +
                 ", avarageStopAtStation=" + avarageStopAtStation +
+                ", isOk=" + isOk +
                 '}';
     }
 }

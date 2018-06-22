@@ -72,6 +72,8 @@ public class GetListOfWagonsImpl implements GetList {
 
                 String nameOfStationDestination = null;
                 String nameRoadStationDestination = null;
+                String nameOfStationDeparture = null;
+                String roadOfStationDeparture = null;
                 int volume = 0;
                 Date dateToDeparted = null;
                 String condition = null;
@@ -86,6 +88,14 @@ public class GetListOfWagonsImpl implements GetList {
                     if (row.getCell(c).getStringCellValue().trim().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         nameRoadStationDestination = xssfRow.getCell(c).getStringCellValue();
+                    }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Станция отправления")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        nameOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
+                    }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Дорога отправления, наименование")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        roadOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Дата отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
@@ -112,7 +122,7 @@ public class GetListOfWagonsImpl implements GetList {
                 if (!nameOfStationDestination.equals("00000")) {
                     if (volume == 122) volume = 120;
                     if (volume == 158) volume = 150;
-                    listOfWagons.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                    listOfWagons.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
                 }
             }
             logger.debug("Body wagon: {}", listOfWagons);
@@ -137,7 +147,8 @@ public class GetListOfWagonsImpl implements GetList {
                 double stopAtStation = 0.00d;
                 for (Wagon wagon1 : listOfWagons) {
                     if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination()) &&
-                            wagon.getVolume() == wagon1.getVolume()) {
+                            wagon.getVolume() == wagon1.getVolume() &&
+                            wagon.getEmptyOrFull().equals("ПОР") && wagon1.getEmptyOrFull().equals("ПОР")) {
                         count++;
                         switch (wagon1.getCondition()) {
                             case "Под погрузкой":
@@ -154,17 +165,25 @@ public class GetListOfWagonsImpl implements GetList {
                                 countDrive++;
                                 break;
                         }
-                        if (wagon1.getEmptyOrFull().equals("ГРУЖ")) {
-                            if (dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() && wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
-                                countInDate++;
-                            }
-                        }
                     }
                 }
-                if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                        wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
-                    listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                            wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
+                /*if (wagon1.getEmptyOrFull().equals("ГРУЖ")) {
+                    if (dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() && wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
+                        countInDate++;
+                    }
+                }*/
+                if (countInDate > 0) {
+                    if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
+                            wagon.getVolume(), 0, 0, 0, countInDate, 0.00d))) {
+                        listCountWagon.add(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
+                                wagon.getVolume(), 0, 0, 0, countInDate, 0.00d));
+                    }
+                } else {
+                    if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
+                            wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
+                        listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
+                                wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
+                    }
                 }
             }
         }

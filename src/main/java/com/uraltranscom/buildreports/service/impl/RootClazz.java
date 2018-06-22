@@ -46,14 +46,16 @@ public class RootClazz {
         getListOfWagons.setDates(dates);
         List<Wagon> wagonList = getListOfWagons.getListCountWagon(getListOfWagons.getListOfWagons());
         Map<Integer, Route> routeMap = getListOfRoutes.getMapOfRoutes();
-        String [] roads = {"АРМ",  "ГР",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СРВ",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ"};
+        String [] roads = {"АРМ",  "ГР",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СВР",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ"};
 
         int i = 0;
         for (Map.Entry<Integer, Route> route : routeMap.entrySet()) {
+            boolean isOk = false;
             for (Wagon wagon : wagonList) {
-                if (route.getValue().getNameOfStationDeparture().equals(wagon.getNameOfStationDestination()) &&
+               if (route.getValue().getNameOfStationDeparture().equals(wagon.getNameOfStationDestination()) &&
                         (wagon.getVolume() == route.getValue().getVolumeFrom())) {
-                    mapResult.put(i, new ResultClazz(wagon.getNameOfStationDestination(),
+                    mapResult.put(i, new ResultClazz(
+                            wagon.getNameOfStationDestination(),
                             wagon.getNameRoadStationDestination(),
                             route.getValue().getCustomer(),
                             wagon.getVolume(),
@@ -63,7 +65,37 @@ public class RootClazz {
                             wagon.getCountInDate(),
                             wagon.getAvarageStopAtStation()));
                     i++;
+                    isOk = true;
                 }
+            }
+            for (Wagon wagon : wagonList) {
+                if (wagon.getCountInDate() > 0 && !wagon.isOk()) {
+                    mapResult.put(i, new ResultClazz(
+                            wagon.getNameOfStationDestination(),
+                            wagon.getNameRoadStationDestination(),
+                            "",
+                            wagon.getVolume(),
+                            0,
+                            wagon.getCountLoading(),
+                            wagon.getCountDrive(),
+                            wagon.getCountInDate(),
+                            wagon.getAvarageStopAtStation()));
+                    wagon.setOk(true);
+                    i++;
+                }
+            }
+            if (!isOk){
+                mapResult.put(i, new ResultClazz(
+                        route.getValue().getNameOfStationDeparture(),
+                        route.getValue().getNameRoadOfStationDeparture(),
+                        route.getValue().getCustomer(),
+                        route.getValue().getVolumeFrom(),
+                        route.getValue().getCountOrder(),
+                        0,
+                        0,
+                        0,
+                        0));
+                i++;
             }
         }
 
