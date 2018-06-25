@@ -171,6 +171,9 @@ public class GetListOfWagonsImpl implements GetList {
                             case "На промывке":
                                 countDrive++;
                                 break;
+                            case "В отстой(е)":
+                                countDrive++;
+                                break;
                         }
                     }
                 }
