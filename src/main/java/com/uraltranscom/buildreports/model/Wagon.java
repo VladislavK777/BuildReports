@@ -33,7 +33,7 @@ public class Wagon {
     private int countInDate; // Количесвто на дату
     private double avarageStopAtStation; // Средний простой под погр, сут.
 
-    boolean isOk = false; // Признак добавления
+    private boolean isOk = false; // Признак добавления
 
     public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull) {
         this.nameOfStationDestination = nameOfStationDestination;
@@ -47,9 +47,11 @@ public class Wagon {
         this.emptyOrFull = emptyOrFull;
     }
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, int volume, int count, int countLoading, int countDrive, int countInDate, double avarageStopAtStation) {
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, double avarageStopAtStation) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
+        this.nameOfStationDeparture = nameOfStationDeparture;
+        this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.volume = volume;
         this.count = count;
         this.countLoading = countLoading;

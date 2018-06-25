@@ -38,7 +38,8 @@ public class GetListOfWagonsImpl implements GetList {
     private static Logger logger = LoggerFactory.getLogger(GetListOfWagonsImpl.class);
 
     // Основаная мапа, куда записываем все вагоны
-    private List<Wagon> listOfWagons = new ArrayList<>();
+    private List<Wagon> listOfWagonsFull = new ArrayList<>();
+    private List<Wagon> listOfWagonsEmpty = new ArrayList<>();
 
     // Переменные для работы с файлами
     private File file ;
@@ -59,7 +60,8 @@ public class GetListOfWagonsImpl implements GetList {
     @Override
     public void fillMap() {
         System.out.println(file.toString());
-        listOfWagons.clear();
+        listOfWagonsFull.clear();
+        listOfWagonsEmpty.clear();
         // Получаем файл формата xls
         try {
             fileInputStream = new FileInputStream(this.file);
@@ -100,6 +102,8 @@ public class GetListOfWagonsImpl implements GetList {
                     if (row.getCell(c).getStringCellValue().trim().equals("Дата отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         dateToDeparted = xssfRow.getCell(c).getDateCellValue();
+                        dateToDeparted.setHours(0);
+                        dateToDeparted.setMinutes(0);
                         if (dateToDeparted == null) dateToDeparted = new Date();
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Состояние вагона")) {
@@ -120,12 +124,17 @@ public class GetListOfWagonsImpl implements GetList {
                     }
                 }
                 if (!nameOfStationDestination.equals("00000")) {
-                    if (volume == 122) volume = 120;
+                    if (volume == 122 || volume == 114) volume = 120;
+                    if (volume == 140) volume = 138;
                     if (volume == 158) volume = 150;
-                    listOfWagons.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                    if (emptyOrFull.equals("ПОР")) {
+                        listOfWagonsEmpty.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                    } else {
+                        listOfWagonsFull.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                    }
                 }
             }
-            logger.debug("Body wagon: {}", listOfWagons);
+            logger.debug("Body wagon: {}, {}", listOfWagonsFull, listOfWagonsEmpty);
         } catch (IOException e) {
             logger.error("Ошибка загруки файла - {}", e.getMessage());
         } catch (OLE2NotOfficeXmlFileException e1) {
@@ -134,21 +143,19 @@ public class GetListOfWagonsImpl implements GetList {
 
     }
 
-    public List<Wagon> getListCountWagon(List<Wagon> listOfWagons) {
+    public List<Wagon> getListCountWagon(List<Wagon> listOfWagonsEmpty, List<Wagon> listOfWagonsFull) {
         List<Wagon> listCountWagon = new ArrayList<>();
-        if (listOfWagons.isEmpty()) {
-            logger.error("Список вагонов пустой");
+        if (listOfWagonsFull.isEmpty() || listOfWagonsEmpty.isEmpty()) {
+            logger.error("Списоки вагонов пусты");
         } else {
-            for (Wagon wagon : listOfWagons) {
+            for (Wagon wagon : listOfWagonsEmpty) {
                 int count = 0;
                 int countLoading = 0;
                 int countDrive = 0;
-                int countInDate = 0;
                 double stopAtStation = 0.00d;
-                for (Wagon wagon1 : listOfWagons) {
+                for (Wagon wagon1 : listOfWagonsEmpty) {
                     if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination()) &&
-                            wagon.getVolume() == wagon1.getVolume() &&
-                            wagon.getEmptyOrFull().equals("ПОР") && wagon1.getEmptyOrFull().equals("ПОР")) {
+                            wagon.getVolume() == wagon1.getVolume()) {
                         count++;
                         switch (wagon1.getCondition()) {
                             case "Под погрузкой":
@@ -167,36 +174,49 @@ public class GetListOfWagonsImpl implements GetList {
                         }
                     }
                 }
-                /*if (wagon1.getEmptyOrFull().equals("ГРУЖ")) {
-                    if (dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() && wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
+                if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
+                        wagon.getVolume(), count, countLoading, countDrive, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
+                    listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
+                            wagon.getVolume(), count, countLoading, countDrive, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
+                }
+            }
+            for (Wagon wagon : listOfWagonsFull) {
+                int countInDate = 0;
+                for (Wagon wagon1 : listOfWagonsFull) {
+                    if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
+                            wagon.getVolume() == wagon1.getVolume() &&
+                            dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
+                            wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
                         countInDate++;
                     }
-                }*/
+                }
                 if (countInDate > 0) {
-                    if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
+                    if (!listCountWagon.contains(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
                             wagon.getVolume(), 0, 0, 0, countInDate, 0.00d))) {
-                        listCountWagon.add(new Wagon(wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
+                        listCountWagon.add(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
                                 wagon.getVolume(), 0, 0, 0, countInDate, 0.00d));
-                    }
-                } else {
-                    if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                            wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
-                        listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(),
-                                wagon.getVolume(), count, countLoading, countDrive, countInDate, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
                     }
                 }
             }
         }
-        logger.debug("listCountWagon: {}", listCountWagon);
+        logger.info("listCountWagon: {}", listCountWagon);
         return listCountWagon;
     }
 
-    public List<Wagon> getListOfWagons() {
-        return listOfWagons;
+    public List<Wagon> getListOfWagonsFull() {
+        return listOfWagonsFull;
     }
 
-    public void setListOfWagons(List<Wagon> listOfWagons) {
-        this.listOfWagons = listOfWagons;
+    public void setListOfWagonsFull(List<Wagon> listOfWagonsFull) {
+        this.listOfWagonsFull = listOfWagonsFull;
+    }
+
+    public List<Wagon> getListOfWagonsEmpty() {
+        return listOfWagonsEmpty;
+    }
+
+    public void setListOfWagonsEmpty(List<Wagon> listOfWagonsEmpty) {
+        this.listOfWagonsEmpty = listOfWagonsEmpty;
     }
 
     public File getFile() {

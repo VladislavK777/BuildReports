@@ -95,8 +95,6 @@ public class GetListOfRoutesImpl implements GetList {
                         countOrder = (int) xssfRow.getCell(c).getNumericCellValue();
                     }
                 }
-                if (volumeFrom == 122) volumeFrom = 120;
-                if (volumeFrom == 158) volumeFrom = 150;
                 if (mapOfRoutes.isEmpty()) {
                     mapOfRoutes.put(i, new Route(nameOfStationDeparture, roadOfStationDeparture, customer, volumeFrom, volumeTo, countOrder));
                     i++;

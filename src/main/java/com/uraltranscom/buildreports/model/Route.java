@@ -20,6 +20,7 @@ public class Route {
     private int volumeFrom; // Объем от
     private int volumeTo; // Объем до
     private int countOrder; // Количество ПС
+    private boolean isOk = false; // Признак добавления
 
     public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volumeFrom, int volumeTo, int countOrder) {
         this.nameOfStationDeparture = nameOfStationDeparture;
@@ -78,12 +79,21 @@ public class Route {
         this.countOrder = countOrder;
     }
 
+    public boolean isOk() {
+        return isOk;
+    }
+
+    public void setOk(boolean ok) {
+        isOk = ok;
+    }
+
     @Override
     public String toString() {
         return  nameOfStationDeparture +
                 ", " + nameRoadOfStationDeparture +
                 ", " + customer +
                 ", " + volumeFrom +
-                ", " + countOrder;
+                ", " + countOrder +
+                ", " + isOk;
     }
 }
