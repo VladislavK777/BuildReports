@@ -99,7 +99,7 @@ public class WriteToFileExcel {
                                             Cell cell5 = rowNew.createCell(4);
                                             cell5.setCellValue(resultClazz.getCount());
                                             Cell cell6 = rowNew.createCell(5);
-                                            cell6.setCellValue("");
+                                            cell6.setCellValue(resultClazz.getCountInDate());
                                             Cell cell7 = rowNew.createCell(6);
                                             cell7.setCellFormula("F" + cellForFormula + "-E" + cellForFormula + "/$M$4*$M$3");
                                             Cell cell8 = rowNew.createCell(7);
@@ -111,7 +111,7 @@ public class WriteToFileExcel {
                                             Cell cell11 = rowNew.createCell(10);
                                             cell11.setCellValue(resultClazz.getCountDrive());
                                             Cell cell12 = rowNew.createCell(11);
-                                            cell12.setCellValue(resultClazz.getCountInDate());
+                                            cell12.setCellValue(resultClazz.getCountInDateSpravo4no());
                                             Cell cell13 = rowNew.createCell(12);
                                             cell13.setCellValue("");
                                             q++;

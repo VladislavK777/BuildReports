@@ -24,10 +24,11 @@ public class ResultClazz {
     private int countLoading; // Под погрузкой, ед.
     private int countDrive; // Подход (в движении), ед.
     private int countInDate; // Количесвто на дату
+    private int countInDateSpravo4no; // Количество на дату для Справочно
     private double avarageStopAtStation; // Средний простой под погр, сут.
     private boolean isOk = false; // Был ли добавлен в файл
 
-    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volume, int count, int countLoading, int countDrive, int countInDate, double avarageStopAtStation) {
+    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.customer = customer;
@@ -36,6 +37,7 @@ public class ResultClazz {
         this.countLoading = countLoading;
         this.countDrive = countDrive;
         this.countInDate = countInDate;
+        this.countInDateSpravo4no = countInDateSpravo4no;
         this.avarageStopAtStation = avarageStopAtStation;
     }
 
@@ -103,6 +105,14 @@ public class ResultClazz {
         this.countInDate = countInDate;
     }
 
+    public int getCountInDateSpravo4no() {
+        return countInDateSpravo4no;
+    }
+
+    public void setCountInDateSpravo4no(int countInDateSpravo4no) {
+        this.countInDateSpravo4no = countInDateSpravo4no;
+    }
+
     public double getAvarageStopAtStation() {
         return avarageStopAtStation;
     }
@@ -129,6 +139,7 @@ public class ResultClazz {
                 countLoading == that.countLoading &&
                 countDrive == that.countDrive &&
                 countInDate == that.countInDate &&
+                countInDateSpravo4no == that.countInDateSpravo4no &&
                 Double.compare(that.avarageStopAtStation, avarageStopAtStation) == 0 &&
                 isOk == that.isOk &&
                 Objects.equals(nameOfStationDeparture, that.nameOfStationDeparture) &&
@@ -139,7 +150,7 @@ public class ResultClazz {
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, customer, volume, count, countLoading, countDrive, countInDate, avarageStopAtStation, isOk);
+        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, customer, volume, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
     }
 
     @Override
@@ -153,6 +164,7 @@ public class ResultClazz {
                 ", countLoading=" + countLoading +
                 ", countDrive=" + countDrive +
                 ", countInDate=" + countInDate +
+                ", countInDateSpravo4no=" + countInDateSpravo4no +
                 ", avarageStopAtStation=" + avarageStopAtStation +
                 ", isOk=" + isOk +
                 '}';

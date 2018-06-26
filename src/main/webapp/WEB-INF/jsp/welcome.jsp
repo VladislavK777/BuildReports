@@ -20,18 +20,6 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js">
     </script>
 
-    <!-- Скрипт всплывающего окна -->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(popup_bg).click(function () {
-                $(popup).fadeOut(800);
-            });
-        });
-        function showPopup() {
-            $(popup).fadeIn(800);
-        }
-    </script>
-
     <!-- Копирайт -->
     <script>
         function cop() {
@@ -62,33 +50,27 @@
 <br><br><br><br><br>
 
 <div>
-    <input type="button" value="Создать отчет" onclick="showPopup()" class="bot1">
-
-    <table class="table_report">
+<table class="table_report">
         <tr>
             <td class="td_report">
-                <div id="popup"
-                     style="position: absolute; height: 100%; width: 100%; top: 0; left: 0; display: none;">
-                    <div id="popup_bg"
-                         style="background: rgba(0, 0, 0, 0.2); position: absolute; z-index: 1; height: 100%; width: 100%;">
-                    </div>
-                    <div class="form">
-                        <form enctype="multipart/form-data" method="post" action="report">
-                            <p>
-                                Файл вагонов <input type="file" name="wagons" multiple accept="xlsx">
-                                Файл заявок <input type="file" name="routes" multiple accept="xlsx">
-                                Выберите дату от <input type="date" name="dateFrom">
-                                Выберите дату до <input type="date" name="dateTo">
-                            </p>
-                            <p>
-                                <input type="submit" value="Загрузить" class="bot1">
-                            </p>
-                        </form>
-                    </div>
+                <div class="form">
+                    <form enctype="multipart/form-data" method="post" action="report">
+                        <p>
+                            Файл вагонов <input type="file" name="wagons" multiple accept="xlsx"><br>
+                            Файл заявок <input type="file" name="routes" multiple accept="xlsx"><br>
+                        <p>Факт</p>
+                            От <input type="date" name="dateFrom"> До <input type="date" name="dateTo"><br>
+                        <p>Суточная погрузка</p>
+                            От <input type="date" name="dateFromSpravo4no"> До <input type="date" name="dateToSpravo4no">
+                        </p>
+                        <p>
+                            <input type="submit" value="Загрузить" class="bot1">
+                        </p>
+                    </form>
                 </div>
             </td>
         </tr>
-    </table>
+</table>
 </div>
 
 <br><br><br>

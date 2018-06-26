@@ -31,6 +31,7 @@ public class Wagon {
     private int countLoading; // Под погрузкой, ед.
     private int countDrive; // Подход (в движении), ед.
     private int countInDate; // Количесвто на дату
+    private int countInDateSpravo4no; // Количество на дату для Справочно
     private double avarageStopAtStation; // Средний простой под погр, сут.
 
     private boolean isOk = false; // Признак добавления
@@ -47,7 +48,7 @@ public class Wagon {
         this.emptyOrFull = emptyOrFull;
     }
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, double avarageStopAtStation) {
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
         this.nameOfStationDeparture = nameOfStationDeparture;
@@ -57,6 +58,7 @@ public class Wagon {
         this.countLoading = countLoading;
         this.countDrive = countDrive;
         this.countInDate = countInDate;
+        this.countInDateSpravo4no = countInDateSpravo4no;
         this.avarageStopAtStation = avarageStopAtStation;
     }
 
@@ -180,6 +182,14 @@ public class Wagon {
         isOk = ok;
     }
 
+    public int getCountInDateSpravo4no() {
+        return countInDateSpravo4no;
+    }
+
+    public void setCountInDateSpravo4no(int countInDateSpravo4no) {
+        this.countInDateSpravo4no = countInDateSpravo4no;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -191,6 +201,7 @@ public class Wagon {
                 countLoading == wagon.countLoading &&
                 countDrive == wagon.countDrive &&
                 countInDate == wagon.countInDate &&
+                countInDateSpravo4no == wagon.countInDateSpravo4no &&
                 Double.compare(wagon.avarageStopAtStation, avarageStopAtStation) == 0 &&
                 isOk == wagon.isOk &&
                 Objects.equals(nameOfStationDestination, wagon.nameOfStationDestination) &&
@@ -205,7 +216,7 @@ public class Wagon {
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, avarageStopAtStation, isOk);
+        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
     }
 
     @Override
@@ -224,6 +235,7 @@ public class Wagon {
                 ", countLoading=" + countLoading +
                 ", countDrive=" + countDrive +
                 ", countInDate=" + countInDate +
+                ", countInDateSpravo4no=" + countInDateSpravo4no +
                 ", avarageStopAtStation=" + avarageStopAtStation +
                 ", isOk=" + isOk +
                 '}';

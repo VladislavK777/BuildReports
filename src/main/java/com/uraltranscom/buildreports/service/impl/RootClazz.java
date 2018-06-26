@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -40,10 +41,11 @@ public class RootClazz {
     private RootClazz() {
     }
 
-    public void startProcess(ArrayList<Date> dates, HttpServletResponse response) {
+    public void startProcess(ArrayList<Date> dates, ArrayList<Date> datesSpravo4no, HttpServletResponse response) {
         Map<Map<String, Boolean>, List<ResultClazz>> totalMap = new HashMap<>();
-        Map<Integer, ResultClazz> mapResult = new HashMap<>();
+        Map<Integer, ResultClazz> mapResult = new ConcurrentHashMap<>();
         getListOfWagons.setDates(dates);
+        getGetListOfWagons().setDatesSpravo4no(datesSpravo4no);
         List<Wagon> wagonList = getListOfWagons.getListCountWagon(getListOfWagons.getListOfWagonsEmpty(), getListOfWagons.getListOfWagonsFull());
         Map<Integer, Route> routeMap = getListOfRoutes.getMapOfRoutes();
         String [] roads = {"АРМ",  "ГР",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СВР",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ"};
@@ -62,6 +64,40 @@ public class RootClazz {
                             wagon.getCountLoading(),
                             wagon.getCountDrive(),
                             wagon.getCountInDate(),
+                            wagon.getCountInDateSpravo4no(),
+                            wagon.getAvarageStopAtStation()));
+                    wagon.setOk(true);
+                    route.getValue().setOk(true);
+                    i++;
+                    for (Wagon wagon1: wagonList) {
+                        if (route.getValue().getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
+                                (wagon1.getVolume() == route.getValue().getVolumeFrom())) {
+                            Iterator<Map.Entry<Integer, ResultClazz>> iterator = mapResult.entrySet().iterator();
+                            while (iterator.hasNext()) {
+                                Map.Entry<Integer, ResultClazz> map = iterator.next();
+                                if (route.getValue().getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture()) &&
+                                        (map.getValue().getVolume() == route.getValue().getVolumeFrom())) {
+                                    map.getValue().setCountInDate(wagon1.getCountInDate());
+                                    map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
+                                    wagon1.setOk(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (route.getValue().getNameOfStationDeparture().equals(wagon.getNameOfStationDeparture()) &&
+                        (wagon.getVolume() == route.getValue().getVolumeFrom()) && !wagon.isOk()) {
+                    mapResult.put(i, new ResultClazz(
+                            route.getValue().getNameOfStationDeparture(),
+                            route.getValue().getNameRoadOfStationDeparture(),
+                            route.getValue().getCustomer(),
+                            route.getValue().getVolumeFrom(),
+                            route.getValue().getCountOrder(),
+                            wagon.getCountLoading(),
+                            wagon.getCountDrive(),
+                            wagon.getCountInDate(),
+                            wagon.getCountInDateSpravo4no(),
                             wagon.getAvarageStopAtStation()));
                     wagon.setOk(true);
                     route.getValue().setOk(true);
@@ -81,6 +117,7 @@ public class RootClazz {
                         0,
                         0,
                         0,
+                        0,
                         0));
                 route.getValue().setOk(true);
                 i++;
@@ -97,9 +134,26 @@ public class RootClazz {
                         wagon.getCountLoading(),
                         wagon.getCountDrive(),
                         wagon.getCountInDate(),
+                        wagon.getCountInDateSpravo4no(),
                         wagon.getAvarageStopAtStation()));
                 wagon.setOk(true);
                 i++;
+                for (Wagon wagon1: wagonList) {
+                    if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDeparture()) &&
+                            (wagon1.getVolume() == wagon.getVolume()) && wagon1.getCountInDate() > 0) {
+                        Iterator<Map.Entry<Integer, ResultClazz>> iterator = mapResult.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            Map.Entry<Integer, ResultClazz> map = iterator.next();
+                            if (wagon1.getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture()) &&
+                                    (map.getValue().getVolume() == wagon1.getVolume())) {
+                                map.getValue().setCountInDate(wagon1.getCountInDate());
+                                map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
+                                wagon1.setOk(true);
+                                break;
+                            }
+                        }
+                    }
+                }
             } else if (!wagon.isOk() && wagon.getCountInDate() > 0) {
                 mapResult.put(i, new ResultClazz(
                         wagon.getNameOfStationDeparture(),
@@ -110,6 +164,7 @@ public class RootClazz {
                         wagon.getCountLoading(),
                         wagon.getCountDrive(),
                         wagon.getCountInDate(),
+                        wagon.getCountInDateSpravo4no(),
                         wagon.getAvarageStopAtStation()));
                 wagon.setOk(true);
                 i++;

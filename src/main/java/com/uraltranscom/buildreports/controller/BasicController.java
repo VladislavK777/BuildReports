@@ -47,13 +47,18 @@ public class BasicController {
     public String routeList(@RequestParam(value = "wagons") MultipartFile wagonFile,
                             @RequestParam(value = "routes") MultipartFile routeFile,
                             @RequestParam(value = "dateFrom") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateFrom,
-                            @RequestParam(value = "dateTo") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateTo, HttpServletResponse response, Model model) {
+                            @RequestParam(value = "dateTo") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateTo,
+                            @RequestParam(value = "dateFromSpravo4no") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateFromSpravo4no,
+                            @RequestParam(value = "dateToSpravo4no") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateToSpravo4no, HttpServletResponse response, Model model) {
         ArrayList<Date> dates = new ArrayList<>();
+        ArrayList<Date> datesSpravo4no = new ArrayList<>();
         dates.add(dateFrom);
         dates.add(dateTo);
+        datesSpravo4no.add(dateFromSpravo4no);
+        datesSpravo4no.add(dateToSpravo4no);
         rootClazz.getGetListOfWagons().setFile(MultipartFileToFile.multipartToFile(wagonFile));
         rootClazz.getGetListOfRoutes().setFile(MultipartFileToFile.multipartToFile(routeFile));
-        rootClazz.startProcess(dates, response);
+        rootClazz.startProcess(dates, datesSpravo4no, response);
         return "welcome";
     }
 }

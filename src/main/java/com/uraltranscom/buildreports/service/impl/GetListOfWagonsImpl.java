@@ -45,6 +45,7 @@ public class GetListOfWagonsImpl implements GetList {
     private File file ;
     private FileInputStream fileInputStream;
     private List<Date> dates;
+    private List<Date> datesSpravo4no;
 
     // Переменные для работы с Excel файлом(формат XLSX)
     private XSSFWorkbook xssfWorkbook;
@@ -178,13 +179,14 @@ public class GetListOfWagonsImpl implements GetList {
                     }
                 }
                 if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                        wagon.getVolume(), count, countLoading, countDrive, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
+                        wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
                     listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                            wagon.getVolume(), count, countLoading, countDrive, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
+                            wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
                 }
             }
             for (Wagon wagon : listOfWagonsFull) {
                 int countInDate = 0;
+                int countInDateSpravo4no = 0;
                 for (Wagon wagon1 : listOfWagonsFull) {
                     if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
                             wagon.getVolume() == wagon1.getVolume() &&
@@ -192,17 +194,23 @@ public class GetListOfWagonsImpl implements GetList {
                             wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
                         countInDate++;
                     }
+                    if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
+                            wagon.getVolume() == wagon1.getVolume() &&
+                            datesSpravo4no.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
+                            wagon1.getDateToDeparted().getTime() <= datesSpravo4no.get(1).getTime()) {
+                        countInDateSpravo4no++;
+                    }
                 }
                 if (countInDate > 0) {
                     if (!listCountWagon.contains(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                            wagon.getVolume(), 0, 0, 0, countInDate, 0.00d))) {
+                            wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no,0.00d))) {
                         listCountWagon.add(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                                wagon.getVolume(), 0, 0, 0, countInDate, 0.00d));
+                                wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no, 0.00d));
                     }
                 }
             }
         }
-        logger.info("listCountWagon: {}", listCountWagon);
+        logger.debug("listCountWagon: {}", listCountWagon);
         return listCountWagon;
     }
 
@@ -237,5 +245,13 @@ public class GetListOfWagonsImpl implements GetList {
 
     public void setDates(ArrayList<Date> dates) {
         this.dates = dates;
+    }
+
+    public List<Date> getDatesSpravo4no() {
+        return datesSpravo4no;
+    }
+
+    public void setDatesSpravo4no(List<Date> datesSpravo4no) {
+        this.datesSpravo4no = datesSpravo4no;
     }
 }
