@@ -60,7 +60,6 @@ public class GetListOfWagonsImpl implements GetList {
     // Заполняем Map вагонами
     @Override
     public void fillMap() {
-        System.out.println(file.toString());
         listOfWagonsFull.clear();
         listOfWagonsEmpty.clear();
         // Получаем файл формата xls

@@ -49,28 +49,20 @@
 
 <br><br><br><br><br>
 
-<div>
-<table class="table_report">
-        <tr>
-            <td class="td_report">
-                <div class="form">
-                    <form enctype="multipart/form-data" method="post" action="report">
-                        <p>
-                            Файл вагонов <input type="file" name="wagons" multiple accept="xlsx"><br>
-                            Файл заявок <input type="file" name="routes" multiple accept="xlsx"><br>
-                        <p>Факт</p>
-                            От <input type="date" name="dateFrom"> До <input type="date" name="dateTo"><br>
-                        <p>Суточная погрузка</p>
-                            От <input type="date" name="dateFromSpravo4no"> До <input type="date" name="dateToSpravo4no">
-                        </p>
-                        <p>
-                            <input type="submit" value="Загрузить" class="bot1">
-                        </p>
-                    </form>
-                </div>
-            </td>
-        </tr>
-</table>
+<div class="form">
+    <form enctype="multipart/form-data" method="post" action="report">
+        <p>
+            Файл вагонов <input type="file" name="wagons" multiple accept="xlsx"><br>
+            Файл заявок <input type="file" name="routes" multiple accept="xlsx"><br>
+        <p>Факт</p>
+            От <input type="date" name="dateFrom"> До <input type="date" name="dateTo"><br>
+        <p>Суточная погрузка</p>
+            От <input type="date" name="dateFromSpravo4no"> До <input type="date" name="dateToSpravo4no">
+        </p>
+        <p>
+            <input type="submit" value="Выполнить" class="bot1">
+        </p>
+    </form>
 </div>
 
 <br><br><br>
