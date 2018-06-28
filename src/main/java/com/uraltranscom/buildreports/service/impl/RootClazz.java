@@ -3,6 +3,7 @@ package com.uraltranscom.buildreports.service.impl;
 import com.uraltranscom.buildreports.model.Route;
 import com.uraltranscom.buildreports.model.Wagon;
 import com.uraltranscom.buildreports.model_ex.ResultClazz;
+import com.uraltranscom.buildreports.service.additional.ComparatorMap;
 import com.uraltranscom.buildreports.service.export.WriteToFileExcel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class RootClazz {
     }
 
     public void startProcess(ArrayList<Date> dates, ArrayList<Date> datesSpravo4no, HttpServletResponse response) {
-        Map<Map<String, Boolean>, List<ResultClazz>> totalMap = new HashMap<>();
+        Map<Map<String, Boolean>, Map<List<ResultClazz>, Integer>> totalMap = new HashMap<>();
         Map<Integer, ResultClazz> mapResult = new ConcurrentHashMap<>();
         getListOfWagons.setDates(dates);
         getGetListOfWagons().setDatesSpravo4no(datesSpravo4no);
@@ -71,12 +72,14 @@ public class RootClazz {
                     i++;
                     for (Wagon wagon1: wagonList) {
                         if (route.getValue().getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
-                                (wagon1.getVolume() == route.getValue().getVolumeFrom())) {
+                                wagon1.getVolume() == route.getValue().getVolumeFrom() &&
+                                wagon1.getCustomer().equals(route.getValue().getCustomer())) {
                             Iterator<Map.Entry<Integer, ResultClazz>> iterator = mapResult.entrySet().iterator();
                             while (iterator.hasNext()) {
                                 Map.Entry<Integer, ResultClazz> map = iterator.next();
                                 if (route.getValue().getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture()) &&
-                                        (map.getValue().getVolume() == route.getValue().getVolumeFrom())) {
+                                        (map.getValue().getVolume() == route.getValue().getVolumeFrom()) &&
+                                        map.getValue().getCustomer().equals(route.getValue().getCustomer())) {
                                     map.getValue().setCountInDate(wagon1.getCountInDate());
                                     map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
                                     wagon1.setOk(true);
@@ -87,7 +90,8 @@ public class RootClazz {
                     }
                 }
                 if (route.getValue().getNameOfStationDeparture().equals(wagon.getNameOfStationDeparture()) &&
-                        (wagon.getVolume() == route.getValue().getVolumeFrom()) && !wagon.isOk()) {
+                        (wagon.getVolume() == route.getValue().getVolumeFrom()) &&
+                        wagon.getCustomer().equals(route.getValue().getCustomer()) && !wagon.isOk()) {
                     mapResult.put(i, new ResultClazz(
                             route.getValue().getNameOfStationDeparture(),
                             route.getValue().getNameRoadOfStationDeparture(),
@@ -140,12 +144,14 @@ public class RootClazz {
                 i++;
                 for (Wagon wagon1: wagonList) {
                     if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDeparture()) &&
-                            (wagon1.getVolume() == wagon.getVolume()) && wagon1.getCountInDate() > 0) {
+                            (wagon1.getVolume() == wagon.getVolume()) && wagon1.getCountInDate() > 0 &&
+                            wagon1.getCustomer().equals(wagon.getCustomer())) {
                         Iterator<Map.Entry<Integer, ResultClazz>> iterator = mapResult.entrySet().iterator();
                         while (iterator.hasNext()) {
                             Map.Entry<Integer, ResultClazz> map = iterator.next();
                             if (wagon1.getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture()) &&
-                                    (map.getValue().getVolume() == wagon1.getVolume())) {
+                                    (map.getValue().getVolume() == wagon1.getVolume()) &&
+                                    wagon1.getCustomer().equals(map.getValue().getCustomer())) {
                                 map.getValue().setCountInDate(wagon1.getCountInDate());
                                 map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
                                 wagon1.setOk(true);
@@ -158,7 +164,7 @@ public class RootClazz {
                 mapResult.put(i, new ResultClazz(
                         wagon.getNameOfStationDeparture(),
                         wagon.getNameRoadOfStationDeparture(),
-                        null,
+                        wagon.getCustomer(),
                         wagon.getVolume(),
                         0,
                         wagon.getCountLoading(),
@@ -171,6 +177,7 @@ public class RootClazz {
             }
         }
 
+        Map<Map<String, Boolean>, List<ResultClazz>> result = new HashMap<>();
         for (String road: roads) {
             List<ResultClazz> resultClazzes = new ArrayList<>();
             Map<String, Boolean> mapKey = new HashMap<>();
@@ -180,9 +187,30 @@ public class RootClazz {
                 }
             }
             mapKey.put(road, false);
-            totalMap.put(mapKey, resultClazzes);
+            result.put(mapKey, resultClazzes);
         }
 
+        Iterator<Map.Entry<Map<String, Boolean>, List<ResultClazz>>> iterator = result.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Map<String, Boolean>, List<ResultClazz>> _result = iterator.next();
+            Map<List<ResultClazz>, Integer> newResultMap = new TreeMap<>(new ComparatorMap());
+            for (ResultClazz resultClazz : _result.getValue()) {
+                int count = 0;
+                List<ResultClazz> newResultList = new ArrayList<>();
+                for (ResultClazz _resultClazz : _result.getValue()) {
+                    if (resultClazz.getNameOfStationDeparture().equals(_resultClazz.getNameOfStationDeparture()) &&
+                            resultClazz.getVolume() == _resultClazz.getVolume()) {
+                        count++;
+                        newResultList.add(_resultClazz);
+                    }
+                }
+                newResultMap.put(newResultList, count);
+            }
+
+            // Добавляем нашу мапу сортированную в Linked для удаление дублей
+            Map<List<ResultClazz>, Integer> newResultMapLinked = new LinkedHashMap<>(newResultMap);
+            totalMap.put(_result.getKey(), newResultMapLinked);
+        }
         logger.debug("map {}", totalMap);
         writeToFileExcel.downloadFileExcel(response, totalMap);
     }

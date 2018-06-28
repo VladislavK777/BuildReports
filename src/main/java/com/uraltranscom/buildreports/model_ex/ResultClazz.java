@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  */
 
-public class ResultClazz {
+public class ResultClazz implements Comparable<ResultClazz> {
     private String nameOfStationDeparture; // Станция отправления
     private String nameRoadOfStationDeparture; // Дорга станции отправления
     private String customer; // Заказчик
@@ -39,6 +39,11 @@ public class ResultClazz {
         this.countInDate = countInDate;
         this.countInDateSpravo4no = countInDateSpravo4no;
         this.avarageStopAtStation = avarageStopAtStation;
+    }
+
+    @Override
+    public int compareTo(ResultClazz o) {
+        return this.nameOfStationDeparture.compareTo(o.nameOfStationDeparture);
     }
 
     public String getNameOfStationDeparture() {

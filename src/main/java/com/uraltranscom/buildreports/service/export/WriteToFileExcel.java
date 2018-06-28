@@ -16,6 +16,8 @@ package com.uraltranscom.buildreports.service.export;
 import com.uraltranscom.buildreports.model_ex.ResultClazz;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
@@ -45,7 +47,7 @@ public class WriteToFileExcel {
     private WriteToFileExcel() {
     }
 
-    public void downloadFileExcel(HttpServletResponse response, Map<Map<String, Boolean>, List<ResultClazz>> totalMap) {
+    public void downloadFileExcel(HttpServletResponse response, Map<Map<String, Boolean>, Map<List<ResultClazz>, Integer>> totalMap) {
         try {
             String fileName = "Report_" + dateFormat.format(new Date()) + ".xlsx";
             response.setHeader("Content-Disposition", "inline; filename=" + fileName);
@@ -59,7 +61,7 @@ public class WriteToFileExcel {
 
     }
 
-    public synchronized void writeToFileExcel(HttpServletResponse response, Map<Map<String, Boolean>, List<ResultClazz>> totalMap) {
+    public synchronized void writeToFileExcel(HttpServletResponse response, Map<Map<String, Boolean>, Map<List<ResultClazz>, Integer>> totalMap) {
         logger.info("start");
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
@@ -72,7 +74,7 @@ public class WriteToFileExcel {
                 XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fis);
                 XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
                 for (int j = 5; j < sheet.getLastRowNum() + 1; j++) {
-                    for (Map.Entry<Map<String, Boolean>, List<ResultClazz>> map : totalMap.entrySet()) {
+                    for (Map.Entry<Map<String, Boolean>, Map<List<ResultClazz>, Integer>> map : totalMap.entrySet()) {
                         for (Map.Entry<String, Boolean> mapKey: map.getKey().entrySet()) {
                             if (!mapKey.getValue()) {
                                 XSSFRow xssfRow = sheet.getRow(j);
@@ -80,45 +82,118 @@ public class WriteToFileExcel {
                                 if (val.equals(mapKey.getKey())) {
                                     // Вставляем запись
                                     int q = j;
-                                    for (ResultClazz resultClazz : map.getValue()) {
-                                        if (!resultClazz.isOk()) {
-                                            int i = sheet.getLastRowNum();
-                                            for (int k = i; k > q; k--) {
-                                                copyRow(xssfWorkbook, sheet, k, k + 1);
+                                    for (Map.Entry<List<ResultClazz>, Integer> resultValue : map.getValue().entrySet()) {
+                                        if (resultValue.getValue() > 1) {
+                                            for (ResultClazz resultClazz : resultValue.getKey()) {
+                                                if (!resultClazz.isOk()) {
+                                                    int i = sheet.getLastRowNum();
+                                                    for (int k = i; k > q; k--) {
+                                                        copyRow(xssfWorkbook, sheet, k, k + 1);
+                                                    }
+                                                    int cellForFormula = q + 2;
+                                                    int cellFixForFormula = cellForFormula + resultValue.getValue() - 1;
+                                                    XSSFRow rowNew = sheet.getRow(q + 1);
+                                                    Cell cell1 = rowNew.createCell(0);
+                                                    cell1.setCellValue(resultClazz.getNameRoadOfStationDeparture());
+                                                    Cell cell2 = rowNew.createCell(1);
+                                                    cell2.setCellValue(resultClazz.getNameOfStationDeparture());
+                                                    cell2.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    Cell cell3 = rowNew.createCell(2);
+                                                    cell3.setCellValue(resultClazz.getCustomer());
+                                                    cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    Cell cell4 = rowNew.createCell(3);
+                                                    cell4.setCellValue(resultClazz.getVolume());
+                                                    cell4.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell5 = rowNew.createCell(4);
+                                                    cell5.setCellValue(resultClazz.getCount());
+                                                    cell5.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell6 = rowNew.createCell(5);
+                                                    cell6.setCellValue(resultClazz.getCountInDate());
+                                                    cell6.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell7 = rowNew.createCell(6);
+                                                    cell7.setCellFormula("SUM(F" + cellForFormula + ":F" + cellFixForFormula + ")-SUM(E" + cellForFormula + ":E" + cellFixForFormula + ")/$M$4*$M$3");
+                                                    cell7.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell8 = rowNew.createCell(7);
+                                                    cell8.setCellFormula("SUM(F" + cellForFormula + ":F" + cellFixForFormula + ")/(SUM(E" + cellForFormula + ":E" + cellFixForFormula + ")/$M$4*$M$3)");
+                                                    cell8.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell9 = rowNew.createCell(8);
+                                                    cell9.setCellValue(resultClazz.getCountLoading());
+                                                    cell9.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell10 = rowNew.createCell(9);
+                                                    cell10.setCellValue(resultClazz.getAvarageStopAtStation());
+                                                    cell10.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell11 = rowNew.createCell(10);
+                                                    cell11.setCellValue(resultClazz.getCountDrive());
+                                                    cell11.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell12 = rowNew.createCell(11);
+                                                    cell12.setCellValue(resultClazz.getCountInDateSpravo4no());
+                                                    cell12.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell13 = rowNew.createCell(12);
+                                                    cell13.setCellValue("");
+                                                    q++;
+                                                    resultClazz.setOk(true);
+                                                }
                                             }
-                                            int cellForFormula = q + 2;
-                                            XSSFRow rowNew = sheet.getRow(q + 1);
-                                            Cell cell1 = rowNew.createCell(0);
-                                            cell1.setCellValue(resultClazz.getNameRoadOfStationDeparture());
-                                            Cell cell2 = rowNew.createCell(1);
-                                            cell2.setCellValue(resultClazz.getNameOfStationDeparture());
-                                            Cell cell3 = rowNew.createCell(2);
-                                            cell3.setCellValue(resultClazz.getCustomer());
-                                            Cell cell4 = rowNew.createCell(3);
-                                            cell4.setCellValue(resultClazz.getVolume());
-                                            Cell cell5 = rowNew.createCell(4);
-                                            cell5.setCellValue(resultClazz.getCount());
-                                            Cell cell6 = rowNew.createCell(5);
-                                            cell6.setCellValue(resultClazz.getCountInDate());
-                                            Cell cell7 = rowNew.createCell(6);
-                                            cell7.setCellFormula("F" + cellForFormula + "-E" + cellForFormula + "/$M$4*$M$3");
-                                            Cell cell8 = rowNew.createCell(7);
-                                            cell8.setCellFormula("F" + cellForFormula + "/(E" + cellForFormula + "/$M$4*$M$3)");
-                                            Cell cell9 = rowNew.createCell(8);
-                                            cell9.setCellValue(resultClazz.getCountLoading());
-                                            Cell cell10 = rowNew.createCell(9);
-                                            cell10.setCellValue(resultClazz.getAvarageStopAtStation());
-                                            Cell cell11 = rowNew.createCell(10);
-                                            cell11.setCellValue(resultClazz.getCountDrive());
-                                            Cell cell12 = rowNew.createCell(11);
-                                            cell12.setCellValue(resultClazz.getCountInDateSpravo4no());
-                                            Cell cell13 = rowNew.createCell(12);
-                                            cell13.setCellValue("");
-                                            q++;
-                                            resultClazz.setOk(true);
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,1, 1));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,3, 3));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,6, 6));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,7, 7));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,8, 8));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,9, 9));
+                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,10, 10));
+                                        } else {
+                                            for (ResultClazz resultClazz : resultValue.getKey()) {
+                                                if (!resultClazz.isOk()) {
+                                                    int i = sheet.getLastRowNum();
+                                                    for (int k = i; k > q; k--) {
+                                                        copyRow(xssfWorkbook, sheet, k, k + 1);
+                                                    }
+                                                    int cellForFormula = q + 2;
+                                                    XSSFRow rowNew = sheet.getRow(q + 1);
+                                                    Cell cell1 = rowNew.createCell(0);
+                                                    cell1.setCellValue(resultClazz.getNameRoadOfStationDeparture());
+                                                    Cell cell2 = rowNew.createCell(1);
+                                                    cell2.setCellValue(resultClazz.getNameOfStationDeparture());
+                                                    cell2.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    Cell cell3 = rowNew.createCell(2);
+                                                    cell3.setCellValue(resultClazz.getCustomer());
+                                                    cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    Cell cell4 = rowNew.createCell(3);
+                                                    cell4.setCellValue(resultClazz.getVolume());
+                                                    cell4.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell5 = rowNew.createCell(4);
+                                                    cell5.setCellValue(resultClazz.getCount());
+                                                    cell5.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell6 = rowNew.createCell(5);
+                                                    cell6.setCellValue(resultClazz.getCountInDate());
+                                                    cell6.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell7 = rowNew.createCell(6);
+                                                    cell7.setCellFormula("F" + cellForFormula + "-E" + cellForFormula + "/$M$4*$M$3");
+                                                    Cell cell8 = rowNew.createCell(7);
+                                                    cell7.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    cell8.setCellFormula("F" + cellForFormula + "/(E" + cellForFormula + "/$M$4*$M$3)");
+                                                    cell8.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell9 = rowNew.createCell(8);
+                                                    cell9.setCellValue(resultClazz.getCountLoading());
+                                                    cell9.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell10 = rowNew.createCell(9);
+                                                    cell10.setCellValue(resultClazz.getAvarageStopAtStation());
+                                                    cell10.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell11 = rowNew.createCell(10);
+                                                    cell11.setCellValue(resultClazz.getCountDrive());
+                                                    cell11.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell12 = rowNew.createCell(11);
+                                                    cell12.setCellValue(resultClazz.getCountInDateSpravo4no());
+                                                    cell12.setCellStyle(cellStyleAlignmentCenter(sheet));
+                                                    Cell cell13 = rowNew.createCell(12);
+                                                    cell13.setCellValue("");
+                                                    q++;
+                                                    resultClazz.setOk(true);
+                                                }
+                                            }
                                         }
+                                        mapKey.setValue(true);
                                     }
-                                    mapKey.setValue(true);
                                 }
                             }
                         }
@@ -133,6 +208,20 @@ public class WriteToFileExcel {
         } catch (IOException e) {
             logger.error("Ошибка записи в файл - {}", e.getMessage());
         }
+    }
+
+    private static XSSFCellStyle cellStyleAlignmentCenter(XSSFSheet sheet) {
+        XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+
+    private static XSSFCellStyle cellStyleAlignmentLeft(XSSFSheet sheet) {
+        XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
     }
 
     private void copyRow(XSSFWorkbook workbook, XSSFSheet worksheet, int sourceRowNum, int destinationRowNum) {

@@ -26,6 +26,7 @@ public class Wagon {
     private String condition; // Состояние вагона Под погрузку
     private double stopAtStation; // Простой на станции дислокации
     private String emptyOrFull; // Состояние вагона Порожний/Груженный
+    private String customer; // Заказчик
 
     private int count; // Количество вагонов на станции
     private int countLoading; // Под погрузкой, ед.
@@ -36,7 +37,7 @@ public class Wagon {
 
     private boolean isOk = false; // Признак добавления
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull) {
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, Date dateToDeparted, String condition, double stopAtStation, String emptyOrFull, String customer) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
         this.nameOfStationDeparture = nameOfStationDeparture;
@@ -46,9 +47,10 @@ public class Wagon {
         this.condition = condition;
         this.stopAtStation = stopAtStation;
         this.emptyOrFull = emptyOrFull;
+        this.customer = customer;
     }
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation, String customer) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
         this.nameOfStationDeparture = nameOfStationDeparture;
@@ -60,6 +62,7 @@ public class Wagon {
         this.countInDate = countInDate;
         this.countInDateSpravo4no = countInDateSpravo4no;
         this.avarageStopAtStation = avarageStopAtStation;
+        this.customer = customer;
     }
 
     public String getNameOfStationDestination() {
@@ -190,6 +193,14 @@ public class Wagon {
         this.countInDateSpravo4no = countInDateSpravo4no;
     }
 
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -210,13 +221,14 @@ public class Wagon {
                 Objects.equals(nameRoadOfStationDeparture, wagon.nameRoadOfStationDeparture) &&
                 Objects.equals(dateToDeparted, wagon.dateToDeparted) &&
                 Objects.equals(condition, wagon.condition) &&
-                Objects.equals(emptyOrFull, wagon.emptyOrFull);
+                Objects.equals(emptyOrFull, wagon.emptyOrFull) &&
+                Objects.equals(customer, wagon.customer);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
+        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, customer, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
     }
 
     @Override
@@ -231,6 +243,7 @@ public class Wagon {
                 ", condition='" + condition + '\'' +
                 ", stopAtStation=" + stopAtStation +
                 ", emptyOrFull='" + emptyOrFull + '\'' +
+                ", customer='" + customer + '\'' +
                 ", count=" + count +
                 ", countLoading=" + countLoading +
                 ", countDrive=" + countDrive +

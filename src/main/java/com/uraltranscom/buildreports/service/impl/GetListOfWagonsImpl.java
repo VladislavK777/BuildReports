@@ -81,6 +81,7 @@ public class GetListOfWagonsImpl implements GetList {
                 String condition = null;
                 double stopAtStation = 0.00d;
                 String emptyOrFull = null;
+                String customer = null;
 
                 for (int c = 0; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().trim().equals("Станция назначения")) {
@@ -122,15 +123,19 @@ public class GetListOfWagonsImpl implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         emptyOrFull = xssfRow.getCell(c).getStringCellValue();
                     }
+                    if (row.getCell(c).getStringCellValue().trim().equals("Заказчик")) {
+                        XSSFRow xssfRow = sheet.getRow(j);
+                        customer = xssfRow.getCell(c).getStringCellValue();
+                    }
                 }
                 if (!nameOfStationDestination.equals("00000")) {
                     if (volume == 122 || volume == 114) volume = 120;
                     if (volume == 140) volume = 138;
                     if (volume == 158) volume = 150;
                     if (emptyOrFull.equals("ПОР")) {
-                        listOfWagonsEmpty.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                        listOfWagonsEmpty.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, null));
                     } else {
-                        listOfWagonsFull.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull));
+                        listOfWagonsFull.add(new Wagon(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, roadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, customer));
                     }
                 }
             }
@@ -178,9 +183,9 @@ public class GetListOfWagonsImpl implements GetList {
                     }
                 }
                 if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                        wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d))) {
+                        wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null))) {
                     listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                            wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d));
+                            wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null));
                 }
             }
             for (Wagon wagon : listOfWagonsFull) {
@@ -189,12 +194,14 @@ public class GetListOfWagonsImpl implements GetList {
                 for (Wagon wagon1 : listOfWagonsFull) {
                     if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
                             wagon.getVolume() == wagon1.getVolume() &&
+                            wagon.getCustomer().equals(wagon1.getCustomer()) &&
                             dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
                             wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
                         countInDate++;
                     }
                     if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
                             wagon.getVolume() == wagon1.getVolume() &&
+                            wagon.getCustomer().equals(wagon1.getCustomer()) &&
                             datesSpravo4no.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
                             wagon1.getDateToDeparted().getTime() <= datesSpravo4no.get(1).getTime()) {
                         countInDateSpravo4no++;
@@ -202,9 +209,9 @@ public class GetListOfWagonsImpl implements GetList {
                 }
                 if (countInDate > 0) {
                     if (!listCountWagon.contains(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                            wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no,0.00d))) {
+                            wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no,0.00d, wagon.getCustomer()))) {
                         listCountWagon.add(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                                wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no, 0.00d));
+                                wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no, 0.00d, wagon.getCustomer()));
                     }
                 }
             }
