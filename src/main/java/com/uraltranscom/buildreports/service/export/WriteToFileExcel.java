@@ -14,8 +14,10 @@ package com.uraltranscom.buildreports.service.export;
  */
 
 import com.uraltranscom.buildreports.model_ex.ResultClazz;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -99,8 +101,13 @@ public class WriteToFileExcel {
                                                     cell2.setCellValue(resultClazz.getNameOfStationDeparture());
                                                     cell2.setCellStyle(cellStyleAlignmentLeft(sheet));
                                                     Cell cell3 = rowNew.createCell(2);
-                                                    cell3.setCellValue(resultClazz.getCustomer());
-                                                    cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    if (resultClazz.getCustomer() == null) {
+                                                        cell3.setCellValue("НЕТ ЗАЯВКИ");
+                                                        cell3.setCellStyle(cellStyleForCustomerEmpty(sheet));
+                                                    } else {
+                                                        cell3.setCellValue(resultClazz.getCustomer());
+                                                        cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    }
                                                     Cell cell4 = rowNew.createCell(3);
                                                     cell4.setCellValue(resultClazz.getVolume());
                                                     cell4.setCellStyle(cellStyleAlignmentCenter(sheet));
@@ -156,8 +163,13 @@ public class WriteToFileExcel {
                                                     cell2.setCellValue(resultClazz.getNameOfStationDeparture());
                                                     cell2.setCellStyle(cellStyleAlignmentLeft(sheet));
                                                     Cell cell3 = rowNew.createCell(2);
-                                                    cell3.setCellValue(resultClazz.getCustomer());
-                                                    cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    if (resultClazz.getCustomer() == null) {
+                                                        cell3.setCellValue("НЕТ ЗАЯВКИ");
+                                                        cell3.setCellStyle(cellStyleForCustomerEmpty(sheet));
+                                                    } else {
+                                                        cell3.setCellValue(resultClazz.getCustomer());
+                                                        cell3.setCellStyle(cellStyleAlignmentLeft(sheet));
+                                                    }
                                                     Cell cell4 = rowNew.createCell(3);
                                                     cell4.setCellValue(resultClazz.getVolume());
                                                     cell4.setCellStyle(cellStyleAlignmentCenter(sheet));
@@ -213,6 +225,17 @@ public class WriteToFileExcel {
     private static XSSFCellStyle cellStyleAlignmentCenter(XSSFSheet sheet) {
         XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+
+    private static XSSFCellStyle cellStyleForCustomerEmpty(XSSFSheet sheet) {
+        Font fontTitle = sheet.getWorkbook().createFont();
+        fontTitle.setColor(HSSFColor.RED.index);
+        fontTitle.setBold(true);
+        XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(fontTitle);
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }

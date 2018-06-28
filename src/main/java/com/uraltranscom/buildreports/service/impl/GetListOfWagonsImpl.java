@@ -105,6 +105,7 @@ public class GetListOfWagonsImpl implements GetList {
                         dateToDeparted = xssfRow.getCell(c).getDateCellValue();
                         dateToDeparted.setHours(0);
                         dateToDeparted.setMinutes(0);
+                        dateToDeparted.setSeconds(0);
                         if (dateToDeparted == null) dateToDeparted = new Date();
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Состояние вагона")) {
