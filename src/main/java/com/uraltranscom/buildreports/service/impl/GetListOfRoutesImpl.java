@@ -12,8 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -66,7 +65,6 @@ public class GetListOfRoutesImpl implements GetList {
                 String roadOfStationDeparture = null;
                 String customer = null;
                 int volumeFrom = 0;
-                int volumeTo = 0;
                 int countOrder = 0;
 
                 for (int c = 1; c < row.getLastCellNum(); c++) {
@@ -86,10 +84,6 @@ public class GetListOfRoutesImpl implements GetList {
                         XSSFRow xssfRow = sheet.getRow(j);
                         volumeFrom = (int) xssfRow.getCell(c).getNumericCellValue();
                     }
-                    if (row.getCell(c).getStringCellValue().trim().equals("Объем до")) {
-                        XSSFRow xssfRow = sheet.getRow(j);
-                        volumeTo = (int) xssfRow.getCell(c).getNumericCellValue();
-                    }
                     if (row.getCell(c).getStringCellValue().trim().equals("Кол-во ПС")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         countOrder = (int) xssfRow.getCell(c).getNumericCellValue();
@@ -99,7 +93,7 @@ public class GetListOfRoutesImpl implements GetList {
                 if (volumeFrom == 140) volumeFrom = 138;
                 if (volumeFrom == 158) volumeFrom = 150;
                 if (mapOfRoutes.isEmpty()) {
-                    mapOfRoutes.put(i, new Route(nameOfStationDeparture, roadOfStationDeparture, customer, volumeFrom, volumeTo, countOrder));
+                    mapOfRoutes.put(i, new Route(nameOfStationDeparture, roadOfStationDeparture, customer,volumeFrom, countOrder));
                     i++;
                 } else {
                     boolean isOk = false;
@@ -108,17 +102,20 @@ public class GetListOfRoutesImpl implements GetList {
                         Map.Entry<Integer, Route> map = iterator.next();
                         if (map.getValue().getNameRoadOfStationDeparture().equals(roadOfStationDeparture) &&
                                 map.getValue().getNameOfStationDeparture().equals(nameOfStationDeparture) &&
-                                map.getValue().getCustomer().equals(customer) &&
-                                map.getValue().getVolumeFrom() == volumeFrom) {
+                                map.getValue().getCustomer().equals(customer)) {
                             map.getValue().setCountOrder(map.getValue().getCountOrder() + countOrder);
+                            map.getValue().getListVolume().add(volumeFrom);
                             isOk = true;
                         }
                     }
                     if (!isOk) {
-                        mapOfRoutes.put(i, new Route(nameOfStationDeparture, roadOfStationDeparture, customer, volumeFrom, volumeTo, countOrder));
+                        mapOfRoutes.put(i, new Route(nameOfStationDeparture, roadOfStationDeparture, customer, volumeFrom, countOrder));
                         i++;
                     }
                 }
+            }
+            for (Map.Entry<Integer, Route> map: mapOfRoutes.entrySet()) {
+                map.getValue().setStringBuilderVolume();
             }
             logger.debug("Body route: {}", mapOfRoutes);
         } catch (IOException e) {

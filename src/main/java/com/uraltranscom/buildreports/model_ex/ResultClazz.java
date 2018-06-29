@@ -19,7 +19,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
     private String nameOfStationDeparture; // Станция отправления
     private String nameRoadOfStationDeparture; // Дорга станции отправления
     private String customer; // Заказчик
-    private int volume; // Объем
+    private String volume; // Объем
     private int count; // Количество заявок
     private int countLoading; // Под погрузкой, ед.
     private int countDrive; // Подход (в движении), ед.
@@ -28,7 +28,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
     private double avarageStopAtStation; // Средний простой под погр, сут.
     private boolean isOk = false; // Был ли добавлен в файл
 
-    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
+    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, String volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.customer = customer;
@@ -70,11 +70,11 @@ public class ResultClazz implements Comparable<ResultClazz> {
         this.customer = customer;
     }
 
-    public int getVolume() {
+    public String getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(String volume) {
         this.volume = volume;
     }
 
@@ -139,8 +139,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ResultClazz that = (ResultClazz) o;
-        return volume == that.volume &&
-                count == that.count &&
+        return count == that.count &&
                 countLoading == that.countLoading &&
                 countDrive == that.countDrive &&
                 countInDate == that.countInDate &&
@@ -149,7 +148,8 @@ public class ResultClazz implements Comparable<ResultClazz> {
                 isOk == that.isOk &&
                 Objects.equals(nameOfStationDeparture, that.nameOfStationDeparture) &&
                 Objects.equals(nameRoadOfStationDeparture, that.nameRoadOfStationDeparture) &&
-                Objects.equals(customer, that.customer);
+                Objects.equals(customer, that.customer) &&
+                Objects.equals(volume, that.volume);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
                 "nameOfStationDeparture='" + nameOfStationDeparture + '\'' +
                 ", nameRoadOfStationDeparture='" + nameRoadOfStationDeparture + '\'' +
                 ", customer='" + customer + '\'' +
-                ", volume=" + volume +
+                ", volume='" + volume + '\'' +
                 ", count=" + count +
                 ", countLoading=" + countLoading +
                 ", countDrive=" + countDrive +

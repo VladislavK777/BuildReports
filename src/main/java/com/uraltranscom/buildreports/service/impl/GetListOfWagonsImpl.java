@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -159,10 +157,12 @@ public class GetListOfWagonsImpl implements GetList {
                 int countLoading = 0;
                 int countDrive = 0;
                 double stopAtStation = 0.00d;
+                StringBuilder stringVolume = new StringBuilder();
+                TreeSet<Integer> listVolume = new TreeSet<>();
                 for (Wagon wagon1 : listOfWagonsEmpty) {
-                    if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination()) &&
-                            wagon.getVolume() == wagon1.getVolume()) {
+                    if (wagon.getNameOfStationDestination().equals(wagon1.getNameOfStationDestination())) {
                         count++;
+                        listVolume.add(wagon1.getVolume());
                         switch (wagon1.getCondition()) {
                             case "Под погрузкой":
                                 countLoading++;
@@ -183,36 +183,56 @@ public class GetListOfWagonsImpl implements GetList {
                         }
                     }
                 }
+                Iterator iterator = listVolume.iterator();
+                while (iterator.hasNext()) {
+                    Object volume = iterator.next();
+                    if (volume != listVolume.last()) {
+                        stringVolume.append(String.valueOf(volume)).append("/");
+                    } else {
+                        stringVolume.append(String.valueOf(volume));
+                    }
+                }
                 if (!listCountWagon.contains(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                        wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null))) {
+                        stringVolume.toString(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null))) {
                     listCountWagon.add(new Wagon(wagon.getNameOfStationDestination(), wagon.getNameRoadStationDestination(), null, null,
-                            wagon.getVolume(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null));
+                            stringVolume.toString(), count, countLoading, countDrive, 0, 0, Math.round((stopAtStation / countLoading) * 100.0) / 100.0d, null));
                 }
             }
             for (Wagon wagon : listOfWagonsFull) {
                 int countInDate = 0;
                 int countInDateSpravo4no = 0;
+                StringBuilder stringVolume = new StringBuilder();
+                TreeSet<Integer> listVolume = new TreeSet<>();
                 for (Wagon wagon1 : listOfWagonsFull) {
                     if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
-                            wagon.getVolume() == wagon1.getVolume() &&
                             wagon.getCustomer().equals(wagon1.getCustomer()) &&
                             dates.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
                             wagon1.getDateToDeparted().getTime() <= dates.get(1).getTime()) {
+                        listVolume.add(wagon1.getVolume());
                         countInDate++;
                     }
                     if (wagon.getNameOfStationDeparture().equals(wagon1.getNameOfStationDeparture()) &&
-                            wagon.getVolume() == wagon1.getVolume() &&
                             wagon.getCustomer().equals(wagon1.getCustomer()) &&
                             datesSpravo4no.get(0).getTime() <= wagon1.getDateToDeparted().getTime() &&
                             wagon1.getDateToDeparted().getTime() <= datesSpravo4no.get(1).getTime()) {
+                        listVolume.add(wagon1.getVolume());
                         countInDateSpravo4no++;
+                    }
+                }
+                Iterator iterator = listVolume.iterator();
+                while (iterator.hasNext()) {
+                    Object volume = iterator.next();
+                    if (volume != listVolume.last()) {
+                        stringVolume.append(String.valueOf(volume)).append("/");
+                    } else {
+                        stringVolume.append(String.valueOf(volume));
                     }
                 }
                 if (countInDate > 0) {
                     if (!listCountWagon.contains(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                            wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no,0.00d, wagon.getCustomer()))) {
+                            stringVolume.toString(), 0, 0, 0, countInDate, countInDateSpravo4no,0.00d, wagon.getCustomer()))) {
                         listCountWagon.add(new Wagon(null, null, wagon.getNameOfStationDeparture(), wagon.getNameRoadOfStationDeparture(),
-                                wagon.getVolume(), 0, 0, 0, countInDate, countInDateSpravo4no, 0.00d, wagon.getCustomer()));
+                                stringVolume.toString(), 0, 0, 0, countInDate, countInDateSpravo4no, 0.00d, wagon.getCustomer()));
                     }
                 }
             }

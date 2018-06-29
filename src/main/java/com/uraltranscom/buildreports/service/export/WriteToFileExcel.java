@@ -142,7 +142,6 @@ public class WriteToFileExcel {
                                                 }
                                             }
                                             sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,1, 1));
-                                            sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,3, 3));
                                             sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,6, 6));
                                             sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,7, 7));
                                             sheet.addMergedRegion(new CellRangeAddress(q - resultValue.getValue() + 1, q,8, 8));

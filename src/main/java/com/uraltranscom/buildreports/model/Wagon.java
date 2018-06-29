@@ -28,6 +28,7 @@ public class Wagon {
     private String emptyOrFull; // Состояние вагона Порожний/Груженный
     private String customer; // Заказчик
 
+    private String volumeTotal; // Строка объединения объемов вагона
     private int count; // Количество вагонов на станции
     private int countLoading; // Под погрузкой, ед.
     private int countDrive; // Подход (в движении), ед.
@@ -50,12 +51,12 @@ public class Wagon {
         this.customer = customer;
     }
 
-    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, int volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation, String customer) {
+    public Wagon(String nameOfStationDestination, String nameRoadStationDestination, String nameOfStationDeparture, String nameRoadOfStationDeparture, String volumeTotal, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation, String customer) {
         this.nameOfStationDestination = nameOfStationDestination;
         this.nameRoadStationDestination = nameRoadStationDestination;
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
-        this.volume = volume;
+        this.volumeTotal = volumeTotal;
         this.count = count;
         this.countLoading = countLoading;
         this.countDrive = countDrive;
@@ -137,6 +138,22 @@ public class Wagon {
         this.emptyOrFull = emptyOrFull;
     }
 
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public String getVolumeTotal() {
+        return volumeTotal;
+    }
+
+    public void setVolumeTotal(String volumeTotal) {
+        this.volumeTotal = volumeTotal;
+    }
+
     public int getCount() {
         return count;
     }
@@ -169,6 +186,14 @@ public class Wagon {
         this.countInDate = countInDate;
     }
 
+    public int getCountInDateSpravo4no() {
+        return countInDateSpravo4no;
+    }
+
+    public void setCountInDateSpravo4no(int countInDateSpravo4no) {
+        this.countInDateSpravo4no = countInDateSpravo4no;
+    }
+
     public double getAvarageStopAtStation() {
         return avarageStopAtStation;
     }
@@ -183,22 +208,6 @@ public class Wagon {
 
     public void setOk(boolean ok) {
         isOk = ok;
-    }
-
-    public int getCountInDateSpravo4no() {
-        return countInDateSpravo4no;
-    }
-
-    public void setCountInDateSpravo4no(int countInDateSpravo4no) {
-        this.countInDateSpravo4no = countInDateSpravo4no;
-    }
-
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
     }
 
     @Override
@@ -222,13 +231,14 @@ public class Wagon {
                 Objects.equals(dateToDeparted, wagon.dateToDeparted) &&
                 Objects.equals(condition, wagon.condition) &&
                 Objects.equals(emptyOrFull, wagon.emptyOrFull) &&
-                Objects.equals(customer, wagon.customer);
+                Objects.equals(customer, wagon.customer) &&
+                Objects.equals(volumeTotal, wagon.volumeTotal);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, customer, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
+        return Objects.hash(nameOfStationDestination, nameRoadStationDestination, nameOfStationDeparture, nameRoadOfStationDeparture, volume, dateToDeparted, condition, stopAtStation, emptyOrFull, customer, volumeTotal, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
     }
 
     @Override
@@ -244,6 +254,7 @@ public class Wagon {
                 ", stopAtStation=" + stopAtStation +
                 ", emptyOrFull='" + emptyOrFull + '\'' +
                 ", customer='" + customer + '\'' +
+                ", volumeTotal='" + volumeTotal + '\'' +
                 ", count=" + count +
                 ", countLoading=" + countLoading +
                 ", countDrive=" + countDrive +

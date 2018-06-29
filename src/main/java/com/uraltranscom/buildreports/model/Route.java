@@ -1,5 +1,7 @@
 package com.uraltranscom.buildreports.model;
 
+import java.util.*;
+
 /**
  *
  * Класс Маршрута
@@ -17,17 +19,16 @@ public class Route {
     private String nameOfStationDeparture; // Станция отправления
     private String nameRoadOfStationDeparture; // Дорга станции отправления
     private String customer; // Заказчик
-    private int volumeFrom; // Объем от
-    private int volumeTo; // Объем до
+    private List<Integer> listVolume = new ArrayList<>(); // Массив объемов;
+    private String volumeTotal; // Строка объединения объемов
     private int countOrder; // Количество ПС
     private boolean isOk = false; // Признак добавления
 
-    public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, int volumeFrom, int volumeTo, int countOrder) {
+    public Route(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, Integer volume, int countOrder) {
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.customer = customer;
-        this.volumeFrom = volumeFrom;
-        this.volumeTo = volumeTo;
+        this.listVolume.add(volume);
         this.countOrder = countOrder;
     }
 
@@ -55,20 +56,20 @@ public class Route {
         this.customer = customer;
     }
 
-    public int getVolumeFrom() {
-        return volumeFrom;
+    public String getVolumeTotal() {
+        return volumeTotal;
     }
 
-    public void setVolumeFrom(int volumeFrom) {
-        this.volumeFrom = volumeFrom;
+    public List<Integer> getListVolume() {
+        return listVolume;
     }
 
-    public int getVolumeTo() {
-        return volumeTo;
+    public void setListVolume(List<Integer> listVolume) {
+        this.listVolume = listVolume;
     }
 
-    public void setVolumeTo(int volumeTo) {
-        this.volumeTo = volumeTo;
+    public void setVolumeTotal(String volumeTotal) {
+        this.volumeTotal = volumeTotal;
     }
 
     public int getCountOrder() {
@@ -87,13 +88,51 @@ public class Route {
         isOk = ok;
     }
 
+    public void setStringBuilderVolume() {
+        StringBuilder stringVolume = new StringBuilder();
+        TreeSet<Integer> listVolume = new TreeSet<>(this.listVolume);
+        Iterator iterator = listVolume.iterator();
+        while (iterator.hasNext()) {
+            Object volume = iterator.next();
+            if (volume != listVolume.last()) {
+                stringVolume.append(String.valueOf(volume)).append("/");
+            } else {
+                stringVolume.append(String.valueOf(volume));
+            }
+        }
+        this.volumeTotal = stringVolume.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return countOrder == route.countOrder &&
+                isOk == route.isOk &&
+                Objects.equals(nameOfStationDeparture, route.nameOfStationDeparture) &&
+                Objects.equals(nameRoadOfStationDeparture, route.nameRoadOfStationDeparture) &&
+                Objects.equals(customer, route.customer) &&
+                Objects.equals(listVolume, route.listVolume) &&
+                Objects.equals(volumeTotal, route.volumeTotal);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, customer, listVolume, volumeTotal, countOrder, isOk);
+    }
+
     @Override
     public String toString() {
-        return  nameOfStationDeparture +
-                ", " + nameRoadOfStationDeparture +
-                ", " + customer +
-                ", " + volumeFrom +
-                ", " + countOrder +
-                ", " + isOk;
+        return "Route{" +
+                "nameOfStationDeparture='" + nameOfStationDeparture + '\'' +
+                ", nameRoadOfStationDeparture='" + nameRoadOfStationDeparture + '\'' +
+                ", customer='" + customer + '\'' +
+                ", listVolume=" + listVolume +
+                ", volumeTotal='" + volumeTotal + '\'' +
+                ", countOrder=" + countOrder +
+                ", isOk=" + isOk +
+                '}';
     }
 }
