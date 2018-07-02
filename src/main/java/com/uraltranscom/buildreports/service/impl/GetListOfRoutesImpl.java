@@ -1,5 +1,6 @@
 package com.uraltranscom.buildreports.service.impl;
 
+import com.uraltranscom.buildreports.model.ReplaceNameStationClazz;
 import com.uraltranscom.buildreports.model.Route;
 import com.uraltranscom.buildreports.service.GetList;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
@@ -70,7 +71,7 @@ public class GetListOfRoutesImpl implements GetList {
                 for (int c = 1; c < row.getLastCellNum(); c++) {
                     if (row.getCell(c).getStringCellValue().trim().equals("Ст. отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
-                        nameOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
+                        nameOfStationDeparture = ReplaceNameStationClazz.getNameRootStation(xssfRow.getCell(c).getStringCellValue());
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Дорога отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);

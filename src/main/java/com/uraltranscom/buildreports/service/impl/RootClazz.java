@@ -49,7 +49,7 @@ public class RootClazz {
         getGetListOfWagons().setDatesSpravo4no(datesSpravo4no);
         List<Wagon> wagonList = getListOfWagons.getListCountWagon(getListOfWagons.getListOfWagonsEmpty(), getListOfWagons.getListOfWagonsFull());
         Map<Integer, Route> routeMap = getListOfRoutes.getMapOfRoutes();
-        String [] roads = {"АРМ",  "ГРЗ",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СВР",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ"};
+        String [] roads = {"АРМ",  "ГРЗ",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СВР",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ", "ДОН"};
 
         int i = 0;
         for (Map.Entry<Integer, Route> route : routeMap.entrySet()) {
@@ -80,8 +80,7 @@ public class RootClazz {
                                         map.getValue().getCustomer().equals(route.getValue().getCustomer())) {
                                     map.getValue().setCountInDate(wagon1.getCountInDate());
                                     map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
-                                    if (wagon1.getVolumeTotal().length() > map.getValue().getVolume().length())
-                                        map.getValue().setVolume(wagon1.getVolumeTotal());
+                                    map.getValue().setVolume(mergeVolume(wagon1.getVolumeTotal(), map.getValue().getVolume()));
                                     wagon1.setOk(true);
                                     break;
                                 }
@@ -97,7 +96,7 @@ public class RootClazz {
                             route.getValue().getNameOfStationDeparture(),
                             route.getValue().getNameRoadOfStationDeparture(),
                             route.getValue().getCustomer(),
-                            route.getValue().getVolumeTotal(),
+                            mergeVolume(wagon.getVolumeTotal(), route.getValue().getVolumeTotal()),
                             route.getValue().getCountOrder(),
                             wagon.getCountLoading(),
                             wagon.getCountDrive(),
@@ -152,8 +151,7 @@ public class RootClazz {
                             if (wagon1.getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture())) {
                                 map.getValue().setCountInDate(wagon1.getCountInDate());
                                 map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
-                                if (wagon1.getVolumeTotal().length() > wagon.getVolumeTotal().length())
-                                    map.getValue().setVolume(wagon1.getVolumeTotal());
+                                map.getValue().setVolume(mergeVolume(wagon1.getVolumeTotal(), map.getValue().getVolume()));
                                 wagon1.setOk(true);
                                 break;
                             }
@@ -210,6 +208,29 @@ public class RootClazz {
         }
         logger.debug("map {}", totalMap);
         writeToFileExcel.downloadFileExcel(response, totalMap);
+    }
+
+    private String mergeVolume(String volume1, String volume2) {
+        StringBuilder stringVolume = new StringBuilder();
+        TreeSet<Integer> listVolume = new TreeSet<>();
+        String [] stringsVolume1 = volume1.split("/");
+        String [] stringsVolume2 = volume2.split("/");
+        for (String sv1: stringsVolume1) {
+            listVolume.add(Integer.parseInt(sv1));
+        }
+        for (String sv2: stringsVolume2) {
+            listVolume.add(Integer.parseInt(sv2));
+        }
+        Iterator iterator = listVolume.iterator();
+        while (iterator.hasNext()) {
+            Object volume = iterator.next();
+            if (volume != listVolume.last()) {
+                stringVolume.append(String.valueOf(volume)).append("/");
+            } else {
+                stringVolume.append(String.valueOf(volume));
+            }
+        }
+        return stringVolume.toString();
     }
 
     public GetListOfWagonsImpl getGetListOfWagons() {

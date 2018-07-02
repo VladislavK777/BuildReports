@@ -13,6 +13,7 @@ package com.uraltranscom.buildreports.controller;
  *
  */
 
+import com.uraltranscom.buildreports.model.ReplaceNameStationClazz;
 import com.uraltranscom.buildreports.service.additional.MultipartFileToFile;
 import com.uraltranscom.buildreports.service.impl.RootClazz;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class BasicController {
 
     @Autowired
     RootClazz rootClazz;
+    ReplaceNameStationClazz replaceNameStationClazz = new ReplaceNameStationClazz();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
@@ -50,6 +52,7 @@ public class BasicController {
                             @RequestParam(value = "dateTo") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateTo,
                             @RequestParam(value = "dateFromSpravo4no") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateFromSpravo4no,
                             @RequestParam(value = "dateToSpravo4no") @DateTimeFormat(pattern="yyyy-MM-dd")  Date dateToSpravo4no, HttpServletResponse response, Model model) {
+        replaceNameStationClazz.start();
         ArrayList<Date> dates = new ArrayList<>();
         ArrayList<Date> datesSpravo4no = new ArrayList<>();
         dates.add(dateFrom);
