@@ -25,10 +25,10 @@ public class ResultClazz implements Comparable<ResultClazz> {
     private int countDrive; // Подход (в движении), ед.
     private int countInDate; // Количесвто на дату
     private int countInDateSpravo4no; // Количество на дату для Справочно
-    private double avarageStopAtStation; // Средний простой под погр, сут.
+    private double averageStopAtStation; // Средний простой под погр, сут.
     private boolean isOk = false; // Был ли добавлен в файл
 
-    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, String volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double avarageStopAtStation) {
+    public ResultClazz(String nameOfStationDeparture, String nameRoadOfStationDeparture, String customer, String volume, int count, int countLoading, int countDrive, int countInDate, int countInDateSpravo4no, double averageStopAtStation) {
         this.nameOfStationDeparture = nameOfStationDeparture;
         this.nameRoadOfStationDeparture = nameRoadOfStationDeparture;
         this.customer = customer;
@@ -38,7 +38,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
         this.countDrive = countDrive;
         this.countInDate = countInDate;
         this.countInDateSpravo4no = countInDateSpravo4no;
-        this.avarageStopAtStation = avarageStopAtStation;
+        this.averageStopAtStation = averageStopAtStation;
     }
 
     @Override
@@ -118,12 +118,12 @@ public class ResultClazz implements Comparable<ResultClazz> {
         this.countInDateSpravo4no = countInDateSpravo4no;
     }
 
-    public double getAvarageStopAtStation() {
-        return avarageStopAtStation;
+    public double getAverageStopAtStation() {
+        return averageStopAtStation;
     }
 
-    public void setAvarageStopAtStation(double avarageStopAtStation) {
-        this.avarageStopAtStation = avarageStopAtStation;
+    public void setAverageStopAtStation(double averageStopAtStation) {
+        this.averageStopAtStation = averageStopAtStation;
     }
 
     public boolean isOk() {
@@ -144,7 +144,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
                 countDrive == that.countDrive &&
                 countInDate == that.countInDate &&
                 countInDateSpravo4no == that.countInDateSpravo4no &&
-                Double.compare(that.avarageStopAtStation, avarageStopAtStation) == 0 &&
+                Double.compare(that.averageStopAtStation, averageStopAtStation) == 0 &&
                 isOk == that.isOk &&
                 Objects.equals(nameOfStationDeparture, that.nameOfStationDeparture) &&
                 Objects.equals(nameRoadOfStationDeparture, that.nameRoadOfStationDeparture) &&
@@ -155,7 +155,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
     @Override
     public int hashCode() {
 
-        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, customer, volume, count, countLoading, countDrive, countInDate, countInDateSpravo4no, avarageStopAtStation, isOk);
+        return Objects.hash(nameOfStationDeparture, nameRoadOfStationDeparture, customer, volume, count, countLoading, countDrive, countInDate, countInDateSpravo4no, averageStopAtStation, isOk);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ResultClazz implements Comparable<ResultClazz> {
                 ", countDrive=" + countDrive +
                 ", countInDate=" + countInDate +
                 ", countInDateSpravo4no=" + countInDateSpravo4no +
-                ", avarageStopAtStation=" + avarageStopAtStation +
+                ", averageStopAtStation=" + averageStopAtStation +
                 ", isOk=" + isOk +
                 '}';
     }

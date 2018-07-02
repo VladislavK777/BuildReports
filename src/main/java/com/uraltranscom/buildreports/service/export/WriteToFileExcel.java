@@ -113,14 +113,14 @@ public class WriteToFileExcel {
                                     int q = j;
                                     for (Map.Entry<List<ResultClazz>, Integer> resultValue : map.getValue().entrySet()) {
                                         if (resultValue.getValue() > 1) {
+                                            // Флаги добавления в ячейку данных, если true, то для объединения ячеек значния повторные добавляться не будт, добавляем 0
                                             boolean isFlagCountLoading = false;
-                                            boolean isFlagAvarageStopAtStation = false;
+                                            boolean isFlagAverageStopAtStation = false;
                                             boolean isFlagCountDrive = false;
                                             boolean isFlagCountFact = false;
                                             boolean isFlagCountFactPercents = false;
                                             for (ResultClazz resultClazz : resultValue.getKey()) {
                                                 if (!resultClazz.isOk()) {
-                                                    // Флаг добавления в ячейку данных, если true, то для объединения ячеек значния повторные добавляться не будт, добавляем 0
                                                     int i = sheet.getLastRowNum();
                                                     for (int k = i; k > q; k--) {
                                                         copyRow(xssfWorkbook, sheet, k, k + 1);
@@ -191,13 +191,13 @@ public class WriteToFileExcel {
                                                         }
                                                     }
                                                     Cell cell10 = rowNew.createCell(9);
-                                                    if (resultClazz.getAvarageStopAtStation() == 0.00d) {
+                                                    if (resultClazz.getAverageStopAtStation() == 0.00d) {
                                                         cell10.setCellStyle(cellStyleWhiteColor(sheet));
                                                     } else {
-                                                        if (!isFlagAvarageStopAtStation) {
-                                                            cell10.setCellValue(resultClazz.getAvarageStopAtStation());
+                                                        if (!isFlagAverageStopAtStation) {
+                                                            cell10.setCellValue(resultClazz.getAverageStopAtStation());
                                                             cell10.setCellStyle(cellStyleAlignmentCenter(sheet));
-                                                            isFlagAvarageStopAtStation = true;
+                                                            isFlagAverageStopAtStation = true;
                                                         } else {
                                                             cell10.setCellValue(0.00d);
                                                             cell10.setCellStyle(cellStyleAlignmentCenter(sheet));
@@ -290,10 +290,10 @@ public class WriteToFileExcel {
                                                         cell9.setCellStyle(cellStyleAlignmentCenter(sheet));
                                                     }
                                                     Cell cell10 = rowNew.createCell(9);
-                                                    if (resultClazz.getAvarageStopAtStation() == 0.00d) {
+                                                    if (resultClazz.getAverageStopAtStation() == 0.00d) {
                                                         cell10.setCellStyle(cellStyleWhiteColor(sheet));
                                                     } else {
-                                                        cell10.setCellValue(resultClazz.getAvarageStopAtStation());
+                                                        cell10.setCellValue(resultClazz.getAverageStopAtStation());
                                                         cell10.setCellStyle(cellStyleAlignmentCenter(sheet));
                                                     }
                                                     Cell cell11 = rowNew.createCell(10);
