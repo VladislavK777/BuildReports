@@ -49,7 +49,7 @@ public class RootClazz {
         getGetListOfWagons().setDatesSpravo4no(datesSpravo4no);
         List<Wagon> wagonList = getListOfWagons.getListCountWagon(getListOfWagons.getListOfWagonsEmpty(), getListOfWagons.getListOfWagonsFull());
         Map<Integer, Route> routeMap = getListOfRoutes.getMapOfRoutes();
-        String [] roads = {"АРМ",  "ГРЗ",  "МНГ",  "МЛД",  "КРГ",  "ТРК",  "ТДЖ",  "УТИ",  "КЗХ",  "ЮЗП",  "ЮЖН",  "ПДН",  "ОДС",  "ЛЬВ",  "АЗР",  "ЭСТ",  "ЛИТ",  "ЛАТ",  "БЕЛ",  "ЖДЯ",  "САХ",  "Крым",  "ДВС",  "ЗАБ",  "ВСБ",  "КРС",  "ЗСБ",  "ЮУР",  "СВР",  "КБШ",  "ПРВ",  "ЮВС",  "СКВ",  "СЕВ",  "ГОР",  "МСК",  "ОКТ",  "КЛГ", "ДОН"};
+        String [] roads = {"АРМ", "ГРЗ", "МНГ", "МЛД", "КРГ", "ТРК", "ТДЖ", "УТИ", "КЗХ", "ЮЗП", "ЮЖН", "ПДН", "ОДС", "ЛЬВ", "АЗР", "ЭСТ", "ЛИТ", "ЛАТ", "БЕЛ", "ЖДЯ", "САХ", "Крым", "ДВС", "ЗАБ", "ВСБ", "КРС", "ЗСБ", "ЮУР", "СВР", "КБШ", "ПРВ", "ЮВС", "СКВ", "СЕВ", "ГОР", "МСК", "ОКТ", "КЛГ", "ДОН"};
 
         int i = 0;
         for (Map.Entry<Integer, Route> route : routeMap.entrySet()) {
