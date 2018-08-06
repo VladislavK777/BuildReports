@@ -133,6 +133,8 @@
     border-top: 5px solid #666666;
     border-radius: 20px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.9);
+    font: 18px "Calibri Light", sans-serif;
+    color: #364274;
 }
 
 .form input {

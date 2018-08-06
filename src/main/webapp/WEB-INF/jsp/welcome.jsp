@@ -27,11 +27,6 @@
         }
     </script>
 
-    <style>
-        body {
-            font: 16px "Calibri Light", sans-serif;
-        }
-    </style>
 </head>
 
 <body onload="cop()">
