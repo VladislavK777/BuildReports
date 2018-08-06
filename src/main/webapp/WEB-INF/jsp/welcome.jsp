@@ -12,7 +12,7 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <html>
 <head>
-    <title>UralTransCom</title>
+    <title>UralTransCom|BuildReports</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="resources/style.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon">
@@ -37,9 +37,9 @@
 <body onload="cop()">
 
 <div class="one">
-    <h1>сервис отчетов</h1>
+    <h1>СЕРВИС ОТЧЕТОВ</h1>
     <div class="train">
-    		<img src="resources/train.jpg">
+    		<img class="image" src="resources/train.jpg">
     </div>
 </div>
 
@@ -48,8 +48,8 @@
 </div>
 
 <br><br><br><br><br>
-
 <div class="form">
+<br><br><br>
     <form enctype="multipart/form-data" method="post" action="report">
         <p>
             Файл вагонов <input type="file" name="wagons" multiple accept="xlsx"><br>
@@ -67,7 +67,7 @@
 
 <br><br><br>
 
-<div align="center" id="footer">
+<div align="center" class="footer">
     Create by Vladislav Klochkov. All rights reserved, <span id="copy"></span>
 </div>
 
