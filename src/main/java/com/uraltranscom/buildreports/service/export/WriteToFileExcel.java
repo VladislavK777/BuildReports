@@ -73,7 +73,7 @@ public class WriteToFileExcel {
                 ZipSecureFile.setMinInflateRatio(-1.0d);
                 xssfWorkbook = new XSSFWorkbook(fis);
                 XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
-                for (int j = 5; j < sheet.getLastRowNum() + 1; j++) {
+                for (int j = 6; j < sheet.getLastRowNum() + 1; j++) {
                     for (Map.Entry<Map<String, Boolean>, Map<List<ResultClazz>, Integer>> map : totalMap.entrySet()) {
                         for (Map.Entry<String, Boolean> mapKey: map.getKey().entrySet()) {
                             if (!mapKey.getValue()) {
@@ -360,25 +360,38 @@ public class WriteToFileExcel {
                 Cell cellLastDay = rowNewLastDay.createCell(12);
                 cellLastDay.setCellValue((Integer) getArrayDates().get(2));
 
-                XSSFRow rowNewHeadSum = sheet.getRow(4);
+                // Утвержденный план
+                XSSFRow row4NewHeadSum = sheet.getRow(4);
+                Cell cellHeader4Sum5 = row4NewHeadSum.createCell(5);
+                cellHeader4Sum5.setCellFormula("F6");
+                cellHeader4Sum5.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarderCellPlan(sheet));
+                Cell cellHeader4Sum6 = row4NewHeadSum.createCell(6);
+                cellHeader4Sum6.setCellFormula("F5-E5/$M$4*$M$3");
+                cellHeader4Sum6.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarderCellPlan(sheet));
+                Cell cellHeader4Sum7 = row4NewHeadSum.createCell(7);
+                cellHeader4Sum7.setCellFormula("F5/(E5/$M$4*$M$3)");
+                cellHeader4Sum7.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarderCellPlanPercentFormat(sheet));
+
+                // ВСЕГО
+                XSSFRow rowNewHeadSum = sheet.getRow(5);
                 Cell cellHeaderSum4 = rowNewHeadSum.createCell(4);
                 cellHeaderSum4.setCellFormula(fillFormulaForHeadersTotal("E", listRowTotalHeaders));
-                cellHeaderSum4.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarder(sheet));
+                cellHeaderSum4.setCellStyle(cellStyleAlignmentCenterColorHeadTopTotal(sheet));
                 Cell cellHeaderSum5 = rowNewHeadSum.createCell(5);
                 cellHeaderSum5.setCellFormula(fillFormulaForHeadersTotal("F", listRowTotalHeaders));
-                cellHeaderSum5.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarder(sheet));
+                cellHeaderSum5.setCellStyle(cellStyleAlignmentCenterColorHeadTopTotal(sheet));
                 Cell cellHeaderSum6 = rowNewHeadSum.createCell(6);
                 cellHeaderSum6.setCellFormula(fillFormulaForHeadersTotal("G", listRowTotalHeaders));
                 cellHeaderSum6.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarderDoubleFormat(sheet));
                 Cell cellHeaderSum7 = rowNewHeadSum.createCell(7);
-                cellHeaderSum7.setCellFormula("F5/(E5/$M$4*$M$3)");
+                cellHeaderSum7.setCellFormula("F6/(E6/$M$4*$M$3)");
                 cellHeaderSum7.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarderTypePercentFormat(sheet));
                 Cell cellHeaderSum8 = rowNewHeadSum.createCell(8);
                 cellHeaderSum8.setCellFormula(fillFormulaForHeadersTotal("I", listRowTotalHeaders));
-                cellHeaderSum8.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarder(sheet));
+                cellHeaderSum8.setCellStyle(cellStyleAlignmentCenterColorHeadTopTotal(sheet));
                 Cell cellHeaderSum10 = rowNewHeadSum.createCell(10);
                 cellHeaderSum10.setCellFormula(fillFormulaForHeadersTotal("K", listRowTotalHeaders));
-                cellHeaderSum10.setCellStyle(cellStyleAlignmentCenterColorHeadTopBoarder(sheet));
+                cellHeaderSum10.setCellStyle(cellStyleAlignmentCenterColorHeadTopTotal(sheet));
                 Cell cellHeaderSum11 = rowNewHeadSum.createCell(11);
                 cellHeaderSum11.setCellFormula(fillFormulaForHeadersTotal("L", listRowTotalHeaders));
                 cellHeaderSum11.setCellStyle(cellStyleAlignmentCenterColorHeadTopAndRightBoarder(sheet));
@@ -488,7 +501,7 @@ public class WriteToFileExcel {
         return cellStyle;
     }
 
-    private static XSSFCellStyle cellStyleAlignmentCenterColorHeadTopBoarder(XSSFSheet sheet) {
+    private static XSSFCellStyle cellStyleAlignmentCenterColorHeadTopTotal(XSSFSheet sheet) {
         XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
         Font font = sheet.getWorkbook().createFont();
         font.setBold(true);
@@ -498,9 +511,45 @@ public class WriteToFileExcel {
         cellStyle.setBorderBottom(BorderStyle.DOTTED);
         cellStyle.setBorderLeft(BorderStyle.DOTTED);
         cellStyle.setBorderRight(BorderStyle.DOTTED);
-        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setBorderTop(BorderStyle.DOTTED);
         cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(191, 191, 191)));
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        return cellStyle;
+    }
+
+    private static XSSFCellStyle cellStyleAlignmentCenterColorHeadTopBoarderCellPlan(XSSFSheet sheet) {
+        XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        Font font = sheet.getWorkbook().createFont();
+        font.setBold(true);
+        font.setColor(HSSFColor.WHITE.index);
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setBorderBottom(BorderStyle.DOTTED);
+        cellStyle.setBorderLeft(BorderStyle.DOTTED);
+        cellStyle.setBorderRight(BorderStyle.DOTTED);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(99, 37, 35)));
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        return cellStyle;
+    }
+
+    private static XSSFCellStyle cellStyleAlignmentCenterColorHeadTopBoarderCellPlanPercentFormat(XSSFSheet sheet) {
+        XSSFCellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        Font font = sheet.getWorkbook().createFont();
+        font.setBold(true);
+        font.setColor(HSSFColor.WHITE.index);
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setBorderBottom(BorderStyle.DOTTED);
+        cellStyle.setBorderLeft(BorderStyle.DOTTED);
+        cellStyle.setBorderRight(BorderStyle.DOTTED);
+        cellStyle.setBorderTop(BorderStyle.MEDIUM);
+        cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(99, 37, 35)));
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        XSSFDataFormat dataFormat = sheet.getWorkbook().createDataFormat();
+        cellStyle.setDataFormat(dataFormat.getFormat("0%"));
         return cellStyle;
     }
 
