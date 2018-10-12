@@ -90,6 +90,9 @@ public class GetListOfWagonsImpl implements GetList {
                     if (row.getCell(c).getStringCellValue().trim().equals("Дорога назначения")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         nameRoadStationDestination = xssfRow.getCell(c).getStringCellValue();
+                        if (nameRoadStationDestination.equals("УЗБ")) {
+                            nameRoadStationDestination = "УТИ";
+                        }
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Станция отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
@@ -98,6 +101,9 @@ public class GetListOfWagonsImpl implements GetList {
                     if (row.getCell(c).getStringCellValue().trim().equals("Дорога отправления, наименование")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         roadOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
+                        if (roadOfStationDeparture.equals("УЗБ")) {
+                            roadOfStationDeparture = "УТИ";
+                        }
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Дата отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
