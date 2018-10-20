@@ -76,6 +76,9 @@ public class GetListOfRoutesImpl implements GetList {
                     if (row.getCell(c).getStringCellValue().trim().equals("Дорога отправления")) {
                         XSSFRow xssfRow = sheet.getRow(j);
                         roadOfStationDeparture = xssfRow.getCell(c).getStringCellValue();
+                        if (roadOfStationDeparture.equals("УЗБ")) {
+                            roadOfStationDeparture = "УТИ";
+                        }
                     }
                     if (row.getCell(c).getStringCellValue().trim().equals("Контрагент")) {
                         XSSFRow xssfRow = sheet.getRow(j);
