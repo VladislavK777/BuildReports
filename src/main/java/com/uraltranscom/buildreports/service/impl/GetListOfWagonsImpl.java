@@ -157,7 +157,7 @@ public class GetListOfWagonsImpl implements GetList {
     public List<Wagon> getListCountWagon(List<Wagon> listOfWagonsEmpty, List<Wagon> listOfWagonsFull) {
         List<Wagon> listCountWagon = new ArrayList<>();
         if (listOfWagonsFull.isEmpty() || listOfWagonsEmpty.isEmpty()) {
-            logger.error("Списоки вагонов пусты");
+            logger.error("Список вагонов пусты");
         } else {
             for (Wagon wagon : listOfWagonsEmpty) {
                 int count = 0;

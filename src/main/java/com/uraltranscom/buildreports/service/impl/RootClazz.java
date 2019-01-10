@@ -149,8 +149,8 @@ public class RootClazz {
                         while (iterator.hasNext()) {
                             Map.Entry<Integer, ResultClazz> map = iterator.next();
                             if (wagon1.getNameOfStationDeparture().equals(map.getValue().getNameOfStationDeparture())) {
-                                map.getValue().setCountInDate(wagon1.getCountInDate());
-                                map.getValue().setCountInDateSpravo4no(wagon1.getCountInDateSpravo4no());
+                                map.getValue().setCountInDate(map.getValue().getCountInDate() + wagon1.getCountInDate());
+                                map.getValue().setCountInDateSpravo4no(map.getValue().getCountInDateSpravo4no() + wagon1.getCountInDateSpravo4no());
                                 map.getValue().setVolume(mergeVolume(wagon1.getVolumeTotal(), map.getValue().getVolume()));
                                 wagon1.setOk(true);
                                 break;
