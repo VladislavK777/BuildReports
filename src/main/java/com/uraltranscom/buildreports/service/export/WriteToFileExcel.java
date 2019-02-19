@@ -482,7 +482,7 @@ public class WriteToFileExcel {
         cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(216, 228, 188)));
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         XSSFDataFormat dataFormat = sheet.getWorkbook().createDataFormat();
-        cellStyle.setDataFormat(dataFormat.getFormat("0.00"));
+        cellStyle.setDataFormat(dataFormat.getFormat("0"));
         return cellStyle;
     }
 
@@ -567,7 +567,7 @@ public class WriteToFileExcel {
         cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(191, 191, 191)));
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         XSSFDataFormat dataFormat = sheet.getWorkbook().createDataFormat();
-        cellStyle.setDataFormat(dataFormat.getFormat("0.00"));
+        cellStyle.setDataFormat(dataFormat.getFormat("0"));
         return cellStyle;
     }
 
@@ -635,7 +635,7 @@ public class WriteToFileExcel {
         cellStyle.setFillForegroundColor(new XSSFColor(new java.awt.Color(255, 255, 0)));
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         XSSFDataFormat dataFormat = sheet.getWorkbook().createDataFormat();
-        cellStyle.setDataFormat(dataFormat.getFormat("0.00"));
+        cellStyle.setDataFormat(dataFormat.getFormat("0"));
         return cellStyle;
     }
 
