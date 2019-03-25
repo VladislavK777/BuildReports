@@ -2,3 +2,8 @@ language: java
 branches:
   only:
     - master
+deploy:
+  provider: heroku
+  app: "build-reports"
+  api_key:
+    secure: "f48f765f-7a12-4214-9a5d-ac23d8c01b58"
