@@ -2,11 +2,6 @@ language: java
 branches:
   only:
     - master
-deploy:
-  provider: heroku
-  app: "build-reports"
-    api_key:
-      secure: "f48f765f-7a12-4214-9a5d-ac23d8c01b58"
 before_script:
   - echo "Starting build"
 script:
@@ -14,9 +9,13 @@ script:
 after_script:
   - echo "Script finished"
 after_success:
-  - echo "Build was successful. $TRAVIS_TEST_RESULT"
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - echo "Build was successful. $TRAVIS_TEST_RESULT"
 after_failure:
   - echo "Build was failed"
-
+deploy:
+  provider: heroku
+  app: "build-reports"
+    api_key:
+      secure: "f48f765f-7a12-4214-9a5d-ac23d8c01b58"
