@@ -1,19 +1,12 @@
 language: java
+sudo: false
+jdk:
+  - oraclejdk8
 branches:
   only:
     - master
-before_script:
-  - echo "Starting build"
 script:
   - mvn clean package
-after_script:
-  - echo "Script finished"
-after_success:
-  - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-  - echo "Build was successful. $TRAVIS_TEST_RESULT"
-after_failure:
-  - echo "Build was failed"
 deploy:
   provider: heroku
   app: "build-reports"
