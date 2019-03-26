@@ -216,7 +216,13 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
                 <configuration>
-                    <repoToken>HWADWfjBJtHCL5IHk7ensn5hPHR50c2vaZ1Bw</repoToken>
+                    <coberturaReports>
+                        <coberturaReport>
+                            ${basedir}/target/coverage.xml
+                        </coberturaReport>
+                    </coberturaReports>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                    <serviceName>travis-ci</serviceName>
                 </configuration>
             </plugin>
         </plugins>
