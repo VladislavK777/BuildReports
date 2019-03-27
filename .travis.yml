@@ -2,13 +2,3 @@ language: java
 sudo: false
 jdk:
   - oraclejdk8
-script:
-  - mvn clean package
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-deploy:
-  provider: heroku
-  app: build-reports
-  api_key:
-    secure: f48f765f-7a12-4214-9a5d-ac23d8c01b58
-  on:  
-    repo: VladislavK777/BuildReports
