@@ -3,7 +3,9 @@ sudo: false
 jdk:
   - oraclejdk8
 script:
-  - mkdir build
+  - ls
+  - mkdir temp_build
+  - ls
   - mvn clean package
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 deploy:
