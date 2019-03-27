@@ -3,11 +3,7 @@ sudo: false
 jdk:
   - oraclejdk8
 script:
-  - ls
-  - mkdir temp_build
-  - ls
-  - mvn clean package
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn clean heroku:deploy-war
 deploy:
   provider: heroku
   app: build-reports
